@@ -16,7 +16,7 @@ function create() {
         
     game.stage.backgroundColor = '#34a26f';
     
-    energyBar = game.add.text(game.world.centerX - 100, 20, 'Engery Left: 10', {fontSize: '20px', fill: '#000', align: 'center'});
+    energyBar = game.add.text(game.world.centerX - 100, 20, 'Energy Left: 10', {fontSize: '20px', fill: '#000', align: 'center'});
     
     game.time.events.loop(Phaser.Timer.SECOND * 5, updateEnergyBar, this);
     
