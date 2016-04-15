@@ -6,7 +6,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.webapp",
       "src": "",
       "projectGuid": "c7a89f94-d300-4a36-ab23-cd5cf7f0be42",
-      "lastModifiedDate": 1460691523598,
+      "lastModifiedDate": 1460726516920,
       "creationDate": 1460691523489
     },
     "sourceDirectory": "website",
@@ -21,7 +21,15 @@
     "projectTags": [
       "XDK-game-app"
     ],
-    "projectFiles": {},
+    "projectFiles": {
+      "xdk-publish-meta-data.json": {
+        "settings": {
+          "project": {
+            "XDK-not-deployed": "True"
+          }
+        }
+      }
+    },
     "projectDirectories": {
       "xdk": {
         "settings": {
