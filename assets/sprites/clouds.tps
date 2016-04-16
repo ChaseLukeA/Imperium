@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.1.0</string>
         <key>fileName</key>
-        <string>/Users/ChaseLukeA/OneDrive/Development/workspace/mobile_web_apps/Imperium/assets/sprites/buttons.tps</string>
+        <string>/Users/ChaseLukeA/OneDrive/Development/workspace/mobile_web_apps/Imperium/assets/sprites/clouds.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -88,9 +88,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>1024</int>
+            <int>4096</int>
             <key>height</key>
-            <int>1024</int>
+            <int>2048</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -104,13 +104,13 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
             <key>forceSquared</key>
-            <true/>
+            <false/>
             <key>forceWordAligned</key>
             <false/>
             <key>maxRects</key>
@@ -121,7 +121,7 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Name</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
                 <key>order</key>
                 <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
@@ -147,7 +147,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>buttons.json</filename>
+                <filename>../../website/assets/sprites/clouds.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -194,15 +194,16 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">btn_metal.png</key>
-            <key type="filename">btn_metal_down.png</key>
-            <key type="filename">btn_metal_over.png</key>
-            <key type="filename">btn_stone.png</key>
-            <key type="filename">btn_stone_down.png</key>
-            <key type="filename">btn_stone_over.png</key>
-            <key type="filename">btn_wood.png</key>
-            <key type="filename">btn_wood_down.png</key>
-            <key type="filename">btn_wood_over.png</key>
+            <key type="filename">cloud_01.png</key>
+            <key type="filename">cloud_02.png</key>
+            <key type="filename">cloud_03.png</key>
+            <key type="filename">cloud_04.png</key>
+            <key type="filename">cloud_05.png</key>
+            <key type="filename">cloud_06.png</key>
+            <key type="filename">cloud_07.png</key>
+            <key type="filename">cloud_08.png</key>
+            <key type="filename">cloud_09.png</key>
+            <key type="filename">cloud_10.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -210,15 +211,16 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>btn_metal_down.png</filename>
-            <filename>btn_metal_over.png</filename>
-            <filename>btn_metal.png</filename>
-            <filename>btn_stone_down.png</filename>
-            <filename>btn_stone_over.png</filename>
-            <filename>btn_stone.png</filename>
-            <filename>btn_wood_down.png</filename>
-            <filename>btn_wood_over.png</filename>
-            <filename>btn_wood.png</filename>
+            <filename>cloud_01.png</filename>
+            <filename>cloud_02.png</filename>
+            <filename>cloud_03.png</filename>
+            <filename>cloud_04.png</filename>
+            <filename>cloud_05.png</filename>
+            <filename>cloud_06.png</filename>
+            <filename>cloud_07.png</filename>
+            <filename>cloud_08.png</filename>
+            <filename>cloud_09.png</filename>
+            <filename>cloud_10.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

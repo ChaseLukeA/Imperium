@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "cloud_01.png",
+	"frame": {"x":1253,"y":1,"w":850,"h":260},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":850,"h":260},
+	"sourceSize": {"w":850,"h":260}
+},
+{
+	"filename": "cloud_02.png",
+	"frame": {"x":1083,"y":1067,"w":1120,"h":330},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1120,"h":330},
+	"sourceSize": {"w":1120,"h":330}
+},
+{
+	"filename": "cloud_03.png",
+	"frame": {"x":1203,"y":1399,"w":1030,"h":350},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1030,"h":350},
+	"sourceSize": {"w":1030,"h":350}
+},
+{
+	"filename": "cloud_04.png",
+	"frame": {"x":1,"y":1499,"w":1200,"h":310},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1200,"h":310},
+	"sourceSize": {"w":1200,"h":310}
+},
+{
+	"filename": "cloud_05.png",
+	"frame": {"x":1,"y":745,"w":1080,"h":380},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1080,"h":380},
+	"sourceSize": {"w":1080,"h":380}
+},
+{
+	"filename": "cloud_06.png",
+	"frame": {"x":1,"y":1,"w":1250,"h":380},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1250,"h":380},
+	"sourceSize": {"w":1250,"h":380}
+},
+{
+	"filename": "cloud_07.png",
+	"frame": {"x":1,"y":383,"w":1240,"h":360},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1240,"h":360},
+	"sourceSize": {"w":1240,"h":360}
+},
+{
+	"filename": "cloud_08.png",
+	"frame": {"x":1083,"y":745,"w":1130,"h":320},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1130,"h":320},
+	"sourceSize": {"w":1130,"h":320}
+},
+{
+	"filename": "cloud_09.png",
+	"frame": {"x":1243,"y":383,"w":1000,"h":260},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":260},
+	"sourceSize": {"w":1000,"h":260}
+},
+{
+	"filename": "cloud_10.png",
+	"frame": {"x":1,"y":1127,"w":1060,"h":370},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1060,"h":370},
+	"sourceSize": {"w":1060,"h":370}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "clouds.png",
+	"format": "RGBA8888",
+	"size": {"w":2244,"h":1810},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:dbc80f500e1743d4819e0247047bf302:7852edd6e2112672204312fea0419436:e96b5453eed6fb7cc3a8e55168758fa4$"
+}
+}
