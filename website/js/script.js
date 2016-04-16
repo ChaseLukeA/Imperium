@@ -11,6 +11,9 @@ var buttons,
 var cloud,
     clouds,
     numberOfClouds;
+var woodGame,
+    metalGame,
+    stoneGame;
     
 
 function preload() {
@@ -18,6 +21,11 @@ function preload() {
     game.load.image('grass_01', 'assets/sprites/grass_01.png');
     game.load.atlas('clouds', 'assets/sprites/clouds.png', 'assets/sprites/clouds.json');
     game.load.atlas('buttons', 'assets/sprites/buttons.png', 'assets/sprites/buttons.json');
+    
+    // -- wood game assets ------------------------------------------ //
+    game.load.image('wood_tile_01', 'assets/sprites/wood_tile_01.png');
+    game.load.image('sun_02', 'assets/sprites/sun_02.png');
+    
 }
 
 
@@ -140,7 +148,7 @@ function create() {
 function playWoodGame() {
     if (enoughEnergy()) {
         decreaseEnergy();
-        alert("Play wood game!");
+        startWoodGame();
     } else {
         alert("Not enough energy!");
     }
@@ -189,4 +197,43 @@ function increaseEnergy() {
 
 function update() {
     
+}
+
+
+
+
+
+
+function startWoodGame() {
+    
+    // created group for mini-game so on exit entire group can be killed
+    woodGame = game.add.group();
+    
+    var table = game.make.tileSprite(
+        game.world.centerX, game.world.centerY,
+        game.width - game.width * 0.10, game.height - game.height * 0.10,
+        'wood_tile_01'
+    );
+    table.anchor.set(0.5);
+    table.tileScale.set(0.33);
+    
+    woodGame.add(table);
+    
+    var button_exitWoodGame = game.make.button(
+        table.width,
+        game.height - table.height,
+        'sun_02',
+        exitWoodGame,
+        this
+    );
+    
+    button_exitWoodGame.anchor.set(0.5);
+    button_exitWoodGame.scale.set(0.20);
+    
+    woodGame.add(button_exitWoodGame);
+}
+
+function exitWoodGame() {
+    
+    game.world.remove(woodGame);
 }
