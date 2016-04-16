@@ -19,15 +19,15 @@ var woodGame,
     
 
 function preload() {
-    game.load.image('dirt_01', 'assets/sprites/dirt_01.png');
-    game.load.image('grass_01', 'assets/sprites/grass_01.png');
-    game.load.atlas('clouds', 'assets/sprites/clouds.png', 'assets/sprites/clouds.json');
     game.load.atlas('buttons', 'assets/sprites/buttons.png', 'assets/sprites/buttons.json');
-    
-    // -- wood game assets ------------------------------------------ //
-    game.load.image('wood_tile_01', 'assets/sprites/wood_tile_01.png');
-    game.load.image('sun_02', 'assets/sprites/sun_02.png');
-    
+    game.load.atlas('clouds', 'assets/sprites/clouds.png', 'assets/sprites/clouds.json');
+    game.load.atlas('earth', 'assets/sprites/earth.png', 'assets/sprites/earth.json');
+    game.load.atlas('grass', 'assets/sprites/grass.png', 'assets/sprites/grass.json');
+    game.load.atlas('sun', 'assets/sprites/sun.png', 'assets/sprites/sun.json');
+    game.load.atlas('trees_flower', 'assets/sprites/trees_flower.png', 'assets/sprites/trees_flower.json');
+    game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
+    game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
+    game.load.atlas('wood_tiles', 'assets/sprites/wood_tiles.png', 'assets/sprites/wood_tiles.json');
 }
 
 
@@ -64,12 +64,15 @@ function create() {
     var ground = game.add.tileSprite(
         0, game.height,  // position
         game.width, game.height * 0.20,  // size
-        'dirt_01'  // sprite key
+        'earth', 'earth_03.png'  // sprite key
     );
     ground.anchor.set(0, 1);  // bottom left anchor
     ground.tileScale.set(0.33);
     
-    var grass = game.add.sprite(0, game.height - game.height * 0.18, 'grass_01' )
+    var grass = game.add.sprite(
+        0, game.height - game.height * 0.18,
+        'grass', 'grass_02.png'
+    );
     grass.anchor.set(0, 1);  // bottom left anchor
     grass.scale.set(game.width / grass.width);
     // -------------------------------------------------------------- //
@@ -218,7 +221,7 @@ function startWoodGame() {
     var table = game.make.tileSprite(
         game.world.centerX, game.world.centerY,
         game.width - game.width * 0.10, game.height - game.height * 0.10,
-        'wood_tile_01'
+        'wood_tiles', 'wood_tile_01.png'
     );
     table.anchor.set(0.5);
     table.tileScale.set(0.33);
@@ -228,9 +231,12 @@ function startWoodGame() {
     var button_exitWoodGame = game.make.button(
         table.width,
         game.height - table.height,
-        'sun_02',
+        'sun',
         exitWoodGame,
-        this
+        this,
+        'sun_01.png',
+        'sun_02.png',
+        'sun_03.png'
     );
     
     button_exitWoodGame.anchor.set(0.5);

@@ -1,0 +1,36 @@
+{"frames": [
+
+{
+	"filename": "tree_01.png",
+	"frame": {"x":2536,"y":1,"w":1363,"h":1220},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1363,"h":1220},
+	"sourceSize": {"w":1363,"h":1220}
+},
+{
+	"filename": "tree_02.png",
+	"frame": {"x":1,"y":1,"w":1111,"h":1580},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1111,"h":1580},
+	"sourceSize": {"w":1111,"h":1580}
+},
+{
+	"filename": "tree_03.png",
+	"frame": {"x":1114,"y":1,"w":1420,"h":1220},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1420,"h":1220},
+	"sourceSize": {"w":1420,"h":1220}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "trees_full.png",
+	"format": "RGBA8888",
+	"size": {"w":3900,"h":1582},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:45812a6694e4df03594cfce1e2085074:97db25275e87a857565ff10ad5ab75ab:ae16b1299d80adae487ca7bef5918d54$"
+}
+}

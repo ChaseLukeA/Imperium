@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "sun_01.png",
+	"frame": {"x":474,"y":1,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "sun_02.png",
+	"frame": {"x":474,"y":513,"w":480,"h":480},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":480,"h":480},
+	"sourceSize": {"w":480,"h":480}
+},
+{
+	"filename": "sun_03.png",
+	"frame": {"x":1,"y":1,"w":471,"h":520},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":471,"h":520},
+	"sourceSize": {"w":472,"h":520}
+},
+{
+	"filename": "sun_04.png",
+	"frame": {"x":1,"y":523,"w":430,"h":430},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":430,"h":430},
+	"sourceSize": {"w":430,"h":430}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "sun.png",
+	"format": "RGBA8888",
+	"size": {"w":985,"h":994},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:4f32e04e405e3ce59c61c17b34170099:a53a580cd38305a8a3b6c9fa9790a6eb:5a564e36ce7f8261f1cbc6bcaa042333$"
+}
+}

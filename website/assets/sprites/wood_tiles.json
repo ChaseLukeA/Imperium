@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "wood_tile_01.png",
+	"frame": {"x":1,"y":1,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "wood_tile_02.png",
+	"frame": {"x":1,"y":513,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "wood_tile_03.png",
+	"frame": {"x":513,"y":1,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "wood_tile_04.png",
+	"frame": {"x":513,"y":513,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "wood_tile.png",
+	"format": "RGBA8888",
+	"size": {"w":1024,"h":1024},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:34360b9d8b155396d22f8c6b0236f195:07383fade40a503dfc0cbd390d9c4d9a:59e6dcde9276200a97b1cef1c93a538d$"
+}
+}

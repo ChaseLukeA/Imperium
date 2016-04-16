@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "tree_07.png",
+	"frame": {"x":1,"y":1,"w":1870,"h":2700},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1870,"h":2700},
+	"sourceSize": {"w":1870,"h":2700}
+},
+{
+	"filename": "tree_08.png",
+	"frame": {"x":1873,"y":2553,"w":1800,"h":2600},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1800,"h":2600},
+	"sourceSize": {"w":1800,"h":2600}
+},
+{
+	"filename": "tree_10.png",
+	"frame": {"x":1873,"y":1,"w":1850,"h":2550},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1850,"h":2550},
+	"sourceSize": {"w":1850,"h":2550}
+},
+{
+	"filename": "tree_12.png",
+	"frame": {"x":1,"y":2703,"w":1830,"h":2540},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1830,"h":2540},
+	"sourceSize": {"w":1830,"h":2540}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "trees_flower.png",
+	"format": "RGBA8888",
+	"size": {"w":3724,"h":5244},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ce56a732c905af986835f67747455af7:e181cfaf7bd4f3dac3f7bf4e7ecb2be8:0f9bd9b24900e707ffcfea27e13b8abb$"
+}
+}
