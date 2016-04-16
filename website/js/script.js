@@ -241,6 +241,8 @@ function playWoodGame() {
 function playMetalGame() {
     if (isEnoughEnergy()) {
         decreaseEnergy();
+        //mainGameRemoveFocus();
+        //startMetalGame();
         alert("Play metal game!");
     } else {
         alert("Not enough energy!");
@@ -251,6 +253,8 @@ function playMetalGame() {
 function playStoneGame() {
     if (isEnoughEnergy()) {
         decreaseEnergy();
+        //mainGameRemoveFocus();
+        //startStoneGame();
         alert("Play stone game!");
     } else {
         alert("Not enough energy!");
@@ -335,6 +339,7 @@ function startMetalGame() {
 
 function exitMetalGame() {
     game.world.remove(metalGame);
+    mainGameSetFocus();
 }
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
@@ -349,6 +354,7 @@ function startStoneGame() {
 
 function exitStoneGame() {
     game.world.remove(stoneGame);
+    mainGameSetFocus();
 }
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
