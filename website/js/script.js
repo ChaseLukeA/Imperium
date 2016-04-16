@@ -284,8 +284,16 @@ function mainGameSetFocus() {
  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
 
-// created groups for mini-games so on exit entire group can be killed
+// created groups for mini-games so on exit entire group can be removed
 // with the 'game.world.remove(gameName)' call
+
+/*
+
+All your mini-game code needs to go in the appropriate 'start<mini>Game()' method and will run separate from the mainGame
+
+Make sure you create all objects with '<varName> = game.make.<objectType>()' and then add it to your mini-game with '<mini>Game.add(<varName>)'
+
+*/
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -335,6 +343,10 @@ function exitWoodGame() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startMetalGame() {
     metalGame = game.add.group();
+    
+    // YOUR MINI-GAME CODE!!!
+    
+    // call exitMetalGame() when the game is over
 }
 
 function exitMetalGame() {
@@ -350,6 +362,10 @@ function exitMetalGame() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startStoneGame() {
     stoneGame = game.add.group();
+    
+    // YOUR MINI-GAME CODE!!!
+    
+    // call exitStoneGame() when the game is over
 }
 
 function exitStoneGame() {
