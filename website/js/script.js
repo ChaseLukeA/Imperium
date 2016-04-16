@@ -1,38 +1,35 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update});
 
-var energyBar,
-    energyBarCurrent,
-    ENERGY_BAR_MAX = 10,
-    ENERGY_BAR_INTERVAL = 10;  // IN SECONDS
-var timerText,  //\\
-    timePassed;  // not sure when either of these is used yet...?
-var buttons,
-    button_playWoodGame,
-    button_playMetalGame,
-    button_playStoneGame;
-var cloud,
-    clouds,
-    numberOfClouds;
-var woodGame,
+var game = new Phaser.Game(
+    800, 600, Phaser.AUTO, '', {
+        preload: preload, create: create, update: update
+    }
+);
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Global Declarations ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+const ENERGY_MAX = 10;
+const ENERGY_INTERVAL = 10;  // in seconds
+
+var energy,
+    energyMeter;
+
+var mainGame,
+    woodGame,
     metalGame,
     stoneGame;
-    
 
-function preload() {
-    game.load.atlas('buttons', 'assets/sprites/buttons.png', 'assets/sprites/buttons.json');
-    game.load.atlas('clouds', 'assets/sprites/clouds.png', 'assets/sprites/clouds.json');
-    game.load.atlas('earth', 'assets/sprites/earth.png', 'assets/sprites/earth.json');
-    game.load.atlas('grass', 'assets/sprites/grass.png', 'assets/sprites/grass.json');
-    game.load.atlas('sun', 'assets/sprites/sun.png', 'assets/sprites/sun.json');
-    game.load.atlas('trees_flower', 'assets/sprites/trees_flower.png', 'assets/sprites/trees_flower.json');
-    game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
-    game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
-    game.load.atlas('wood_tiles', 'assets/sprites/wood_tiles.png', 'assets/sprites/wood_tiles.json');
-}
+// javascript addon filters
+var blurX,
+    blurY;
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
 
-// -- global game functions ----------------------------------------- //
-
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Global Game Functions ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // generate a random number between min and max
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -53,54 +50,110 @@ function randomPercentage(min, max) {
 function paddedNumber(number) {
     return number < 10 ? "0" + number : number;
 }
-// ------------------------------------------------------------------ //
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Phaser.State Functions ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function preload() {
+    // -- load sprites and atlases -- //
+    game.load.atlas('buttons', 'assets/sprites/buttons.png', 'assets/sprites/buttons.json');
+    game.load.atlas('clouds', 'assets/sprites/clouds.png', 'assets/sprites/clouds.json');
+    game.load.atlas('earth', 'assets/sprites/earth.png', 'assets/sprites/earth.json');
+    game.load.atlas('grass', 'assets/sprites/grass.png', 'assets/sprites/grass.json');
+    game.load.atlas('sun', 'assets/sprites/sun.png', 'assets/sprites/sun.json');
+    game.load.atlas('trees_flower', 'assets/sprites/trees_flower.png', 'assets/sprites/trees_flower.json');
+    game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
+    game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
+    game.load.atlas('wood_tiles', 'assets/sprites/wood_tiles.png', 'assets/sprites/wood_tiles.json');
+    
+    // -- load audio -- //
+    // TODO: add audio clips
+    
+    // -- load scripts -- //
+    game.load.script('filterX', 'js/addons/BlurX.js');
+    game.load.script('filterY', 'js/addons/BlurY.js');
+}
 
     
 function create() {
-        
+    
+    // -- create blurring filter -- //
+    blurX = game.add.filter('BlurX');
+    blurY = game.add.filter('BlurY');
+    
+    energy = ENERGY_MAX;
+    
+    game.time.events.loop(
+        Phaser.Timer.SECOND * ENERGY_INTERVAL, increaseEnergy, this
+    );
+    
     game.stage.backgroundColor = '#74a5f4';
     
-    // --- create ground and grass ---------------------------------- //
-    var ground = game.add.tileSprite(
-        0, game.height,  // position
-        game.width, game.height * 0.20,  // size
-        'earth', 'earth_03.png'  // sprite key
+    createMainGame();
+}
+
+
+function update() {
+    
+}
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Main Game Functions ~                                      [mainGame]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function createMainGame() {
+    var ground,
+        grass,
+        clouds;
+    var button_playWoodGame,
+        button_playMetalGame,
+        button_playStoneGame;
+    
+    mainGame = game.add.group();
+    
+    // -- create ground -- //
+    ground = game.make.tileSprite(
+        0, game.height, game.width, game.height * 0.20, 'earth', 'earth_03.png'
     );
-    ground.anchor.set(0, 1);  // bottom left anchor
+    ground.anchor.set(0, 1);
     ground.tileScale.set(0.33);
+    mainGame.add(ground);
     
-    var grass = game.add.sprite(
-        0, game.height - game.height * 0.18,
-        'grass', 'grass_02.png'
+    // -- create grass -- //
+    grass = game.make.sprite(
+        0, game.height - game.height * 0.18, 'grass', 'grass_02.png'
     );
-    grass.anchor.set(0, 1);  // bottom left anchor
+    grass.anchor.set(0, 1);
     grass.scale.set(game.width / grass.width);
-    // -------------------------------------------------------------- //
+    mainGame.add(grass);
     
-    
-    // --- create random clouds ------------------------------------- //
-    numberOfClouds = randomNumber(3, 6);
-    clouds = game.add.group();
+    // -- create random clouds -- //
+    var numberOfClouds = randomNumber(3, 6);
+    clouds = game.make.group();
     
     for (var totalClouds = 0; totalClouds < numberOfClouds; totalClouds++) {
         
-        var randomCloud = paddedNumber(randomNumber(1, 10));
+        var randomCloudSprite = paddedNumber(randomNumber(1, 10));
         
         cloud = clouds.create(
             randomNumber(0, game.width),
             randomNumber(0, game.height * 0.667),
-            'clouds', 'cloud_' + randomCloud + ".png"
+            'clouds', 'cloud_' + randomCloudSprite + ".png"
         );
         
         cloud.anchor.set(0.5);
         cloud.scale.set(randomPercentage(15, 25));
         cloud.alpha = (randomPercentage(80, 100));
     }
-    // -------------------------------------------------------------- //
+    mainGame.add(clouds);
     
-    
-    // -- create mini-game buttons ---------------------------------- //
-    button_playWoodGame = game.add.button(
+    // -- create mini-game buttons -- //
+    button_playWoodGame = game.make.button(
         game.width * 0.39,
         game.height * 0.92,
         'buttons',
@@ -112,8 +165,9 @@ function create() {
     );
     button_playWoodGame.anchor.set(0.5);
     button_playWoodGame.scale.set(0.35);
+    mainGame.add(button_playWoodGame);
     
-    button_playMetalGame = game.add.button(
+    button_playMetalGame = game.make.button(
         game.width * 0.50,
         game.height * 0.90,
         'buttons',
@@ -125,8 +179,9 @@ function create() {
     );
     button_playMetalGame.anchor.set(0.5);
     button_playMetalGame.scale.set(0.35);
+    mainGame.add(button_playMetalGame);
     
-    button_playStoneGame = game.add.button(
+    button_playStoneGame = game.make.button(
         game.width * 0.61,
         game.height * 0.92,
         'buttons',
@@ -138,30 +193,53 @@ function create() {
     );
     button_playStoneGame.anchor.set(0.5);
     button_playStoneGame.scale.set(0.35);
-    // -------------------------------------------------------------- //
+    mainGame.add(button_playStoneGame);
     
-    
-    // -- create energy bar ----------------------------------------- //
-    energyBarCurrent = ENERGY_BAR_MAX;
-    energyBar = game.add.text(game.world.centerX - 100, 20, 'Energy Left: ' + energyBarCurrent, {fontSize: '20px', fill: '#000', align: 'center'});
-    
-    game.time.events.loop(Phaser.Timer.SECOND * ENERGY_BAR_INTERVAL, increaseEnergy, this);
-    // -------------------------------------------------------------- //
+    // -- create energy bar -- //
+    energyMeter = game.make.text(game.world.centerX - 100, 20, 'Energy Left: ' + energy, {fontSize: '20px', fill: '#000', align: 'center'});
+    mainGame.add(energyMeter);
 }
 
 
-// -- mini-game loaders --------------------------------------------- //
+function isEnoughEnergy() {
+    return energy > 0 ? true : false;
+}
+
+
+function decreaseEnergy() {
+    if (energy > 0) {
+        energy--;
+        updateEnergyMeter();
+    }
+}
+
+
+function increaseEnergy() {
+    if (energy < ENERGY_MAX ) {
+        energy++;
+        updateEnergyMeter();
+    }
+}
+
+
+function updateEnergyMeter() {
+    energyMeter.setText('Energy Left: ' + energy);
+}
+
+
 function playWoodGame() {
-    if (enoughEnergy()) {
+    if (isEnoughEnergy()) {
         decreaseEnergy();
+        mainGameRemoveFocus();
         startWoodGame();
     } else {
         alert("Not enough energy!");
     }
 }
 
+
 function playMetalGame() {
-    if (enoughEnergy()) {
+    if (isEnoughEnergy()) {
         decreaseEnergy();
         alert("Play metal game!");
     } else {
@@ -169,53 +247,48 @@ function playMetalGame() {
     }
 }
 
+
 function playStoneGame() {
-    if (enoughEnergy()) {
+    if (isEnoughEnergy()) {
         decreaseEnergy();
         alert("Play stone game!");
     } else {
         alert("Not enough energy!");
     }
 }
-// ------------------------------------------------------------------ //
 
 
-// -- energy functions ---------------------------------------------- //
-function enoughEnergy() {
-    return energyBarCurrent > 0 ? true : false;
-}
-
-function decreaseEnergy() {
-    if (energyBarCurrent > 0) {
-        energyBarCurrent--;
-        updateEnergyBar();
-    }
-}
-
-function increaseEnergy() {
-    if (energyBarCurrent < ENERGY_BAR_MAX ) {
-        energyBarCurrent++;
-        updateEnergyBar();
-    }
-}
-
-function updateEnergyBar() {
-    energyBar.setText('Energy Left: ' + energyBarCurrent);
-}
-// ------------------------------------------------------------------ //
-
-
-function update() {
+function mainGameRemoveFocus() {
+    mainGame.forEach(function(obj) {
+        obj.filters = [blurX, blurY];
+        if (obj.type == Phaser.BUTTON) {
+            obj.kill();
+        }
+    }, this);
 }
 
 
+function mainGameSetFocus() {
+    mainGame.forEach(function(obj) {
+        obj.filters = null;
+        if (obj.type == Phaser.BUTTON) {
+            obj.revive();
+        }
+    }, this);
+}
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
-// ------------------------------------------------------------------ //
-// -- Luke's wood collecting game ------------------*SPACESHIP!*----- //
-// ------------------------------------------------------------------ //
+
+// created groups for mini-games so on exit entire group can be killed
+// with the 'game.world.remove(gameName)' call
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Wood Game Functions ~                                      [woodGame]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startWoodGame() {
     
-    // created group for mini-game so on exit entire group can be killed
     woodGame = game.add.group();
     
     var table = game.make.tileSprite(
@@ -246,7 +319,36 @@ function startWoodGame() {
 }
 
 function exitWoodGame() {
-    
     game.world.remove(woodGame);
+    mainGameSetFocus();
 }
-// ------------------------------------------------------------------ //
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Metal Game Functions ~                                    [metalGame]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function startMetalGame() {
+    metalGame = game.add.group();
+}
+
+function exitMetalGame() {
+    game.world.remove(metalGame);
+}
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Stone Game Functions ~                                    [stoneGame]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function startStoneGame() {
+    stoneGame = game.add.group();
+}
+
+function exitStoneGame() {
+    game.world.remove(stoneGame);
+}
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
