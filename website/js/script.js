@@ -1,9 +1,11 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update});
 
 var energyBar,
-    energyTotal = 10;
-var timerText,
-    time;
+    energyBarCurrent,
+    ENERGY_BAR_MAX = 10,
+    ENERGY_BAR_INTERVAL = 10;  // IN SECONDS
+var timerText,  //\\
+    timePassed;  // not sure when either of these is used yet...?
 var buttons,
     button_playWoodGame,
     button_playMetalGame,
@@ -137,9 +139,10 @@ function create() {
     
     
     // -- create energy bar ----------------------------------------- //
-    energyBar = game.add.text(game.world.centerX - 100, 20, 'Energy Left: 10', {fontSize: '20px', fill: '#000', align: 'center'});
+    energyBarCurrent = ENERGY_BAR_MAX;
+    energyBar = game.add.text(game.world.centerX - 100, 20, 'Energy Left: ' + energyBarCurrent, {fontSize: '20px', fill: '#000', align: 'center'});
     
-    game.time.events.loop(Phaser.Timer.SECOND * 5, updateEnergyBar, this);
+    game.time.events.loop(Phaser.Timer.SECOND * ENERGY_BAR_INTERVAL, increaseEnergy, this);
     // -------------------------------------------------------------- //
 }
 
@@ -176,34 +179,37 @@ function playStoneGame() {
 
 // -- energy functions ---------------------------------------------- //
 function enoughEnergy() {
-    return energyTotal > 0 ? true : false;
+    return energyBarCurrent > 0 ? true : false;
 }
 
 function decreaseEnergy() {
-    if (energyTotal > 0) {
-        energyTotal--;
-        energyBar.setText('Energy Left: ' + energyTotal);
+    if (energyBarCurrent > 0) {
+        energyBarCurrent--;
+        updateEnergyBar();
     }
 }
 
 function increaseEnergy() {
-    if (energyTotal <= 9 ) {
-        energyTotal++;
-        energyBar.setText('Engery Left: ' + energyTotal);
+    if (energyBarCurrent < ENERGY_BAR_MAX ) {
+        energyBarCurrent++;
+        updateEnergyBar();
     }
+}
+
+function updateEnergyBar() {
+    energyBar.setText('Energy Left: ' + energyBarCurrent);
 }
 // ------------------------------------------------------------------ //
 
 
 function update() {
-    
 }
 
 
 
-
-
-
+// ------------------------------------------------------------------ //
+// -- Luke's wood collecting game ------------------*SPACESHIP!*----- //
+// ------------------------------------------------------------------ //
 function startWoodGame() {
     
     // created group for mini-game so on exit entire group can be killed
@@ -237,3 +243,4 @@ function exitWoodGame() {
     
     game.world.remove(woodGame);
 }
+// ------------------------------------------------------------------ //
