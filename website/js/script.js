@@ -28,7 +28,7 @@ var mainGame,
     stoneGame;
 
 var activeGame;
-var games = {  // 'enum' used in update() method to only run active game
+var Game = {  // 'enum' used in update() method to only run active game
         MAIN: 0,
         WOOD: 1,
         METAL: 2,
@@ -59,6 +59,11 @@ function randomPercentage(min, max) {
     return randomNumber(min, max) / 100;
 }
 
+// return a fractional percentage from an input percentage from 1 to 100
+function p(number) {
+    return number / 100;
+}
+
 // pad a single digit number, so '4' would become '04', and '10'
 // would just stay '10'; great for use with sprites and atlases where
 // the assets are named with precise digits (e.g. sky_01.png, sky_02.png)
@@ -73,6 +78,13 @@ function paddedNumber(number) {
 ~ Phaser.State Functions ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function preload() {
+    // -- game settings -- //
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;
+    game.scale.refresh();
+    
     // -- load sprites and atlases -- //
     game.load.atlas('buttons', 'assets/sprites/buttons.png', 'assets/sprites/buttons.json');
     game.load.atlas('clouds', 'assets/sprites/clouds.png', 'assets/sprites/clouds.json');
@@ -94,36 +106,36 @@ function preload() {
 
     
 function create() {
-    
     // -- create blurring filter -- //
     blurX = game.add.filter('BlurX');
     blurY = game.add.filter('BlurY');
     
-    energy = ENERGY_MAX;
-    
+    // -- game settings -- //
     game.time.events.loop(
         Phaser.Timer.SECOND * ENERGY_INTERVAL, increaseEnergy, this
     );
     
     game.stage.backgroundColor = '#74a5f4';
     
+    // -- set up game -- //
+    energy = ENERGY_MAX;
     createMainGame();
-    activeGame = games.MAIN;
+    activeGame = Game.MAIN;
 }
 
 
 function update() {
     switch (activeGame) {
-        case games.MAIN:
+        case Game.MAIN:
             // any mainGame -specific update code goes here
             break;
-        case games.WOOD:
+        case Game.WOOD:
             // any woodGame -specific update code goes here
             break;
-        case games.METAL:
+        case Game.METAL:
             // any metalGame -specific update code goes here
             break;
-        case games.STONE:
+        case Game.STONE:
             // any stoneGame -specific update code goes here
             break;
     }
@@ -304,7 +316,7 @@ function mainGameRemoveFocus() {
 
 
 function mainGameSetFocus() {
-    activeGame = games.MAIN;
+    activeGame = Game.MAIN;
     mainGame.forEach(function(obj) {
         obj.filters = null;
         if (obj.type == Phaser.BUTTON) {
@@ -333,7 +345,7 @@ Make sure you create all objects with '<varName> = game.make.<objectType>()' and
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startWoodGame() {
     
-    activeGame = games.WOOD;
+    activeGame = Game.WOOD;
     woodGame = game.add.group();
     
     var table = game.make.tileSprite(
@@ -375,7 +387,7 @@ function exitWoodGame() {
 ~ Metal Game Functions ~                                    [metalGame]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startMetalGame() {
-    activeGame = games.METAL;
+    activeGame = Game.METAL;
     metalGame = game.add.group();
     
     // YOUR MINI-GAME CODE!!!
@@ -395,7 +407,7 @@ function exitMetalGame() {
 ~ Stone Game Functions ~                                    [stoneGame]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startStoneGame() {
-    activeGame = games.STONE;
+    activeGame = Game.STONE;
     stoneGame = game.add.group();
     
     // YOUR MINI-GAME CODE!!!
