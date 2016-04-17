@@ -1,3 +1,10 @@
+/*
+ *  Imperium
+ *
+ *  a Phaser game coded by Luke A Chase, Will Weathers, Charles Marion
+ *  © 2016
+ *
+ */
 
 var game = new Phaser.Game(
     800, 600, Phaser.AUTO, '', {
@@ -19,6 +26,14 @@ var mainGame,
     woodGame,
     metalGame,
     stoneGame;
+
+var activeGame;
+var games = {  // 'enum' used in update() method to only run active game
+        MAIN: 0,
+        WOOD: 1,
+        METAL: 2,
+        STONE: 3
+    };
 
 // javascript addon filters
 var blurX,
@@ -93,11 +108,27 @@ function create() {
     game.stage.backgroundColor = '#74a5f4';
     
     createMainGame();
+    activeGame = games.MAIN;
 }
 
 
 function update() {
+    switch (activeGame) {
+        case games.MAIN:
+            // any mainGame -specific update code goes here
+            break;
+        case games.WOOD:
+            // any woodGame -specific update code goes here
+            break;
+        case games.METAL:
+            // any metalGame -specific update code goes here
+            break;
+        case games.STONE:
+            // any stoneGame -specific update code goes here
+            break;
+    }
     
+    // any universal (all games) update code goes here
 }
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
@@ -273,6 +304,7 @@ function mainGameRemoveFocus() {
 
 
 function mainGameSetFocus() {
+    activeGame = games.MAIN;
     mainGame.forEach(function(obj) {
         obj.filters = null;
         if (obj.type == Phaser.BUTTON) {
@@ -301,6 +333,7 @@ Make sure you create all objects with '<varName> = game.make.<objectType>()' and
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startWoodGame() {
     
+    activeGame = games.WOOD;
     woodGame = game.add.group();
     
     var table = game.make.tileSprite(
@@ -342,6 +375,7 @@ function exitWoodGame() {
 ~ Metal Game Functions ~                                    [metalGame]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startMetalGame() {
+    activeGame = games.METAL;
     metalGame = game.add.group();
     
     // YOUR MINI-GAME CODE!!!
@@ -361,6 +395,7 @@ function exitMetalGame() {
 ~ Stone Game Functions ~                                    [stoneGame]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startStoneGame() {
+    activeGame = games.STONE;
     stoneGame = game.add.group();
     
     // YOUR MINI-GAME CODE!!!
