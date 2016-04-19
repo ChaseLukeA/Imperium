@@ -406,12 +406,16 @@ function decreaseResource(resource, amount)
         resource.amount -= amount;
         updateResourceMeter(resource);
     }
+    else
+    {
+        alert("Cannot decrease " + resource.name + " below 0!");
+    }
 }
 
 
 function increaseEnergy()
 {
-    if (energy.amount < energy.max)
+    if (energy.amount + ENERGY_INCREMENT <= energy.max)
     {
         energy.amount += ENERGY_INCREMENT;
     }
