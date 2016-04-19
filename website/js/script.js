@@ -22,6 +22,18 @@ const ENERGY_INTERVAL = 10;  // in seconds
 var energy,
     energyMeter;
 
+var wood,
+    woodMeter;
+
+var metal,
+    metalMeter;
+
+var stone,
+    stoneMeter;
+
+var gold,
+    goldMeter;
+
 var mainGame,
     woodGame,
     metalGame,
@@ -38,6 +50,7 @@ var Game = {  // 'enum' used in update() method to only run active game
 // javascript addon filters
 var blurX,
     blurY;
+
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
@@ -119,6 +132,11 @@ function create() {
     
     // -- set up game -- //
     energy = ENERGY_MAX;
+    wood = 0;
+    metal = 0;
+    stone = 0;
+    gold = 100;
+    
     createMainGame();
     activeGame = Game.MAIN;
 }
@@ -239,8 +257,26 @@ function createMainGame() {
     mainGame.add(button_playStoneGame);
     
     // -- create energy bar -- //
-    energyMeter = game.make.text(game.world.centerX - 100, 20, 'Energy Left: ' + energy, {fontSize: '20px', fill: '#000', align: 'center'});
+    energyMeter = game.make.text(game.world.width * 0.04, game.world.height * 0.89, 'Energy: ' + energy, {fontSize: '20px', fill: '#fff', align: 'center'});
     mainGame.add(energyMeter);
+    
+    // -- create wood bar -- //
+    woodMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.83, 'Wood: ' + wood, {fontSize: '20px', fill: '#fff', align: 'center'});
+    mainGame.add(woodMeter);
+    
+    // -- create metal bar -- //
+    metalMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.87, 'Metal: ' + metal, {fontSize: '20px', fill: '#fff', align: 'center'});
+    mainGame.add(metalMeter);
+    
+    // -- create stone bar -- //
+    stoneMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.91, 'Stone: ' + stone, {fontSize: '20px', fill: '#fff', align: 'center'});
+    mainGame.add(stoneMeter);
+    
+    // -- create gold bar -- //
+    goldMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.95, 'Gold: ' + gold, {fontSize: '20px', fill: '#fff', align: 'center'});
+    mainGame.add(goldMeter);
+    
+    
 }
 
 
@@ -266,7 +302,7 @@ function increaseEnergy() {
 
 
 function updateEnergyMeter() {
-    energyMeter.setText('Energy Left: ' + energy);
+    energyMeter.setText('Energy: ' + energy);
 }
 
 
@@ -348,9 +384,20 @@ function startWoodGame() {
     activeGame = Game.WOOD;
     woodGame = game.add.group();
     
+    var frameShadow = game.make.sprite()
+    var frame = game.make.tileSprite(
+        game.world.centerX, game.world.centerY,
+        game.width - game.width * 0.1, game.height - game.height * 0.1,
+        'earth', 'earth_05.png'
+    );
+    frame.anchor.set(0.5);
+    frame.tileScale.set(0.33);
+    
+    woodGame.add(frame);
+    
     var table = game.make.tileSprite(
         game.world.centerX, game.world.centerY,
-        game.width - game.width * 0.10, game.height - game.height * 0.10,
+        game.width - game.width * 0.13, game.height - game.height * 0.13,
         'wood_tiles', 'wood_tile_01.png'
     );
     table.anchor.set(0.5);
@@ -410,6 +457,7 @@ function startStoneGame() {
     activeGame = Game.STONE;
     stoneGame = game.add.group();
     
+    //something changed here
     // YOUR MINI-GAME CODE!!!
     
     // call exitStoneGame() when the game is over
