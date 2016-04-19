@@ -18,6 +18,15 @@ var game = new Phaser.Game(
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 const ENERGY_MAX = 10;
 const ENERGY_INTERVAL = 10;  // in seconds
+const ENERGY_INCREMENT = 1;
+
+var Resource = {
+    Energy: { name: 'Energy', amount: 0, max: ENERGY_MAX },
+    Wood: { name: 'Wood', amount: 0 },
+    Metal: { name: 'Metal', amount: 0 },
+    Stone: { name: 'Stone', amount: 0 },
+    Gold: { name: 'Gold', amount: 0 }
+};
 
 var energy,
     energyMeter;
@@ -38,6 +47,8 @@ var mainGame,
     woodGame,
     metalGame,
     stoneGame;
+
+var GAME_COST = 1;
 
 var activeGame;
 var Game = {  // 'enum' used in update() method to only run active game
@@ -123,19 +134,19 @@ function create() {
     blurX = game.add.filter('BlurX');
     blurY = game.add.filter('BlurY');
     
-    // -- game settings -- //
-    game.time.events.loop(
-        Phaser.Timer.SECOND * ENERGY_INTERVAL, increaseEnergy, this
-    );
-    
     game.stage.backgroundColor = '#74a5f4';
     
     // -- set up game -- //
-    energy = ENERGY_MAX;
-    wood = 0;
-    metal = 0;
-    stone = 0;
-    gold = 100;
+    energy = Resource.Energy;
+    energy.amount = energy.max;
+    wood = Resource.Wood;
+    wood.amount = 0;
+    metal = Resource.Metal;
+    metal.amount = 0;
+    stone = Resource.Stone;
+    stone.amount = 0;
+    gold = Resource.Gold;
+    gold.amount = 100;
     
     createMainGame();
     activeGame = Game.MAIN;
@@ -171,6 +182,7 @@ function createMainGame() {
     var ground,
         grass,
         clouds;
+    
     var button_playWoodGame,
         button_playMetalGame,
         button_playStoneGame;
@@ -257,167 +269,66 @@ function createMainGame() {
     mainGame.add(button_playStoneGame);
     
     // -- create energy bar -- //
-    energyMeter = game.make.text(game.world.width * 0.04, game.world.height * 0.89, 'Energy: ' + energy, {fontSize: '20px', fill: '#fff', align: 'center'});
+    energyMeter = game.make.text(
+        game.world.width * 0.04,
+        game.world.height * 0.89,
+        "",
+        {fontSize: '20px', fill: '#fff', align: 'center'}
+    );
     mainGame.add(energyMeter);
+    updateResourceMeter(energy);
     
     // -- create wood bar -- //
-    woodMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.83, 'Wood: ' + wood, {fontSize: '20px', fill: '#fff', align: 'center'});
+    woodMeter = game.make.text(
+        game.world.width * 0.86,
+        game.world.height * 0.83,
+        "",
+        {fontSize: '20px', fill: '#fff', align: 'center'}
+    );
     mainGame.add(woodMeter);
+    updateResourceMeter(wood);
     
     // -- create metal bar -- //
-    metalMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.87, 'Metal: ' + metal, {fontSize: '20px', fill: '#fff', align: 'center'});
+    metalMeter = game.make.text(
+        game.world.width * 0.86,
+        game.world.height * 0.87,
+        "",
+        {fontSize: '20px', fill: '#fff', align: 'center'}
+    );
     mainGame.add(metalMeter);
+    updateResourceMeter(metal);
     
     // -- create stone bar -- //
-    stoneMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.91, 'Stone: ' + stone, {fontSize: '20px', fill: '#fff', align: 'center'});
+    stoneMeter = game.make.text(
+        game.world.width * 0.86,
+        game.world.height * 0.91,
+        "",
+        {fontSize: '20px', fill: '#fff', align: 'center'}
+    );
     mainGame.add(stoneMeter);
+    updateResourceMeter(stone);
     
     // -- create gold bar -- //
-    goldMeter = game.make.text(game.world.width * 0.86, game.world.height * 0.95, 'Gold: ' + gold, {fontSize: '20px', fill: '#fff', align: 'center'});
+    goldMeter = game.make.text(
+        game.world.width * 0.86,
+        game.world.height * 0.95,
+        "",
+        {fontSize: '20px', fill: '#fff', align: 'center'}
+    );
     mainGame.add(goldMeter);
+    updateResourceMeter(gold);
     
-    
-}
-
-// -- energy Functions --//
-function isEnoughEnergy() {
-    return energy > 0 ? true : false;
-}
-
-
-function decreaseEnergy() {
-    if (energy > 0) {
-        energy--;
-        updateEnergyMeter();
-    }
-}
-
-
-function increaseEnergy() {
-    if (energy < ENERGY_MAX ) {
-        energy++;
-        updateEnergyMeter();
-    }
-}
-
-
-function updateEnergyMeter() {
-    energyMeter.setText('Energy: ' + energy);
-}
-
-
-// -- wood Functions --//
-function isEnoughWood() {
-    return wood > 0 ? true : false;
-}
-
-
-function decreaseWood() {
-    if (wood > 0) {
-        wood--;
-        updateWoodMeter();
-    }
-}
-
-
-function increaseWood() {
-    if (wood < wood_MAX ) {
-        wood++;
-        updateWoodMeter();
-    }
-}
-
-
-function updateWoodMeter() {
-    woodMeter.setText('Wood: ' + wood);
-}
-
-
-// -- metal Functions --//
-function isEnoughMetal() {
-    return metal > 0 ? true : false;
-}
-
-
-function decreaseMetal() {
-    if (metal > 0) {
-        metal--;
-        updateMetalMeter();
-    }
-}
-
-
-function increaseMetal() {
-    if (metal < metal_MAX ) {
-        metal++;
-        updateMetalMeter();
-    }
-}
-
-
-function updateMetalMeter() {
-    metalMeter.setText('Metal: ' + metal);
-}
-
-
-// -- stone Functions --//
-function isEnoughStone() {
-    return stone > 0 ? true : false;
-}
-
-
-function decreaseStone() {
-    if (stone > 0) {
-        stone--;
-        updateStoneMeter();
-    }
-}
-
-
-function increaseStone() {
-    if (stone < stone_MAX ) {
-        stone++;
-        updateStoneMeter();
-    }
-}
-
-
-function updateStoneMeter() {
-    stoneMeter.setText('Stone: ' + stone);
-}
-
-
-// -- gold Functions --//
-function isEnoughGold() {
-    return gold > 0 ? true : false;
-}
-
-
-function decreaseGold() {
-    if (gold > 0) {
-        gold--;
-        updateGoldMeter();
-    }
-}
-
-
-function increaseGold() {
-    if (gold < gold_MAX ) {
-        gold++;
-        updateGoldMeter();
-    }
-}
-
-
-function updateGoldMeter() {
-    goldMeter.setText('Gold: ' + gold);
+    // -- start energy auto-regeneration -- //
+    game.time.events.loop(
+        Phaser.Timer.SECOND * ENERGY_INTERVAL, increaseEnergy, this
+    );
 }
 
 
 // -- Mini-Game Functions --//
 function playWoodGame() {
-    if (isEnoughEnergy()) {
-        decreaseEnergy();
+    if (isEnough(energy, GAME_COST)) {
+        decreaseResource(energy, GAME_COST);
         mainGameRemoveFocus();
         startWoodGame();
     } else {
@@ -427,8 +338,8 @@ function playWoodGame() {
 
 
 function playMetalGame() {
-    if (isEnoughEnergy()) {
-        decreaseEnergy();
+    if (isEnough(energy, GAME_COST)) {
+        decreaseResource(energy, GAME_COST);
         //mainGameRemoveFocus();
         //startMetalGame();
         alert("Play metal game!");
@@ -439,8 +350,8 @@ function playMetalGame() {
 
 
 function playStoneGame() {
-    if (isEnoughEnergy()) {
-        decreaseEnergy();
+    if (isEnough(energy, GAME_COST)) {
+        decreaseResource(energy, GAME_COST);
         //mainGameRemoveFocus();
         //startStoneGame();
         alert("Play stone game!");
@@ -468,6 +379,70 @@ function mainGameSetFocus() {
             obj.revive();
         }
     }, this);
+}
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Resource Functions ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function isEnough(resource, target)
+{
+    return resource.amount - target >= 0 ? true : false;
+}
+
+
+function increaseResource(resource, amount)
+{
+    resource.amount += amount;
+    updateResourceMeter(resource);
+}
+
+
+function decreaseResource(resource, amount)
+{
+    if (resource.amount - amount >= 0) {
+        resource.amount -= amount;
+        updateResourceMeter(resource);
+    }
+}
+
+
+function increaseEnergy()
+{
+    if (energy.amount < energy.max)
+    {
+        energy.amount += ENERGY_INCREMENT;
+    }
+    else
+    {
+        energy.amount = energy.max;
+    }
+    updateResourceMeter(energy);
+}
+
+
+function updateResourceMeter(resource)
+{
+    switch (resource.name)
+    {
+        case 'Energy':
+            energyMeter.setText(resource.name + ": " + resource.amount);
+            break;
+        case 'Wood':
+            woodMeter.setText(resource.name + ": " + resource.amount);
+            break;
+        case 'Metal':
+            metalMeter.setText(resource.name + ": " + resource.amount);
+            break;
+        case 'Stone':
+            stoneMeter.setText(resource.name + ": " + resource.amount);
+            break;
+        case 'Gold':
+            goldMeter.setText(resource.name + ": " + resource.amount);
+            break;
+    }
 }
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
