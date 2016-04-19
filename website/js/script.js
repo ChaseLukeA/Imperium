@@ -279,7 +279,7 @@ function createMainGame() {
     
 }
 
-
+// -- energy Functions --//
 function isEnoughEnergy() {
     return energy > 0 ? true : false;
 }
@@ -306,6 +306,115 @@ function updateEnergyMeter() {
 }
 
 
+// -- wood Functions --//
+function isEnoughWood() {
+    return wood > 0 ? true : false;
+}
+
+
+function decreaseWood() {
+    if (wood > 0) {
+        wood--;
+        updateWoodMeter();
+    }
+}
+
+
+function increaseWood() {
+    if (wood < wood_MAX ) {
+        wood++;
+        updateWoodMeter();
+    }
+}
+
+
+function updateWoodMeter() {
+    woodMeter.setText('Wood: ' + wood);
+}
+
+
+// -- metal Functions --//
+function isEnoughMetal() {
+    return metal > 0 ? true : false;
+}
+
+
+function decreaseMetal() {
+    if (metal > 0) {
+        metal--;
+        updateMetalMeter();
+    }
+}
+
+
+function increaseMetal() {
+    if (metal < metal_MAX ) {
+        metal++;
+        updateMetalMeter();
+    }
+}
+
+
+function updateMetalMeter() {
+    metalMeter.setText('Metal: ' + metal);
+}
+
+
+// -- stone Functions --//
+function isEnoughStone() {
+    return stone > 0 ? true : false;
+}
+
+
+function decreaseStone() {
+    if (stone > 0) {
+        stone--;
+        updateStoneMeter();
+    }
+}
+
+
+function increaseStone() {
+    if (stone < stone_MAX ) {
+        stone++;
+        updateStoneMeter();
+    }
+}
+
+
+function updateStoneMeter() {
+    stoneMeter.setText('Stone: ' + stone);
+}
+
+
+// -- gold Functions --//
+function isEnoughGold() {
+    return gold > 0 ? true : false;
+}
+
+
+function decreaseGold() {
+    if (gold > 0) {
+        gold--;
+        updateGoldMeter();
+    }
+}
+
+
+function increaseGold() {
+    if (gold < gold_MAX ) {
+        gold++;
+        updateGoldMeter();
+    }
+}
+
+
+function updateGoldMeter() {
+    goldMeter.setText('Gold: ' + gold);
+}
+
+
+// -- Mini-Game Functions --//
 function playWoodGame() {
     if (isEnoughEnergy()) {
         decreaseEnergy();
