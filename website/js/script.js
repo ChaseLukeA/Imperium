@@ -6,8 +6,7 @@
  *
  */
 
-var game = new Phaser.Game(
-    800, 600, Phaser.AUTO, '', {
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
         preload: preload, create: create, update: update
     }
 );
@@ -16,17 +15,43 @@ var game = new Phaser.Game(
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Global Declarations ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-const ENERGY_MAX = 10;
-const ENERGY_INTERVAL = 10;  // in seconds
-const ENERGY_INCREMENT = 1;
+const ENERGY_MAX = 10;  // most energy you can have
+const ENERGY_INTERVAL = 10;  // how often energy autoIncreases
+const ENERGY_INCREMENT = 1;  // the amount energy autoIncreases
 
-var Resource = {
-    Energy: { name: 'Energy', amount: 0, max: ENERGY_MAX },
-    Wood: { name: 'Wood', amount: 0 },
-    Metal: { name: 'Metal', amount: 0 },
-    Stone: { name: 'Stone', amount: 0 },
-    Gold: { name: 'Gold', amount: 0 }
-};
+/* --------------------------------------------------------------
+ * Resource is used to build new resources which have thier own
+ * properties and methods, e.g. energy, wood, metal, stone, gold;
+ * --------------------------------------------------------------
+ * Example:
+ *   var silver = new Resource('Silver', 40);
+ *   silver.name;  >> outputs 'Silver'
+ *   silver.amount;  >> outputs '40'
+ *   silver.increase(10);
+ *   silver.amount;  >> outputs '50'
+ *   silver.hasEnoughFor(60);  >> outputs 'false' because 60 > 50
+ *   silver.decrease(20);
+ *   silver.amount;  >> outputs '30'
+ */
+var Resource = function (_name, _amount, _max) {
+    this.name = _name;
+    this.amount = _amount;
+    this.max = (_max == null ? 0 : _max);
+    
+    this.increase = function(value) {
+        this.amount += value;
+    },
+    this.decrease = function(value) {
+        if (this.amount - value >= 0) {
+            this.amount -= value;
+        } else {
+            alert(this.name + " cannot go below zero!");
+        }
+    },
+    this.hasEnoughFor = function(value) {
+        return this.amount - value >= 0;
+    }
+}
 
 var energy,
     energyMeter;
@@ -137,16 +162,11 @@ function create() {
     game.stage.backgroundColor = '#74a5f4';
     
     // -- set up game -- //
-    energy = Resource.Energy;
-    energy.amount = energy.max;
-    wood = Resource.Wood;
-    wood.amount = 0;
-    metal = Resource.Metal;
-    metal.amount = 0;
-    stone = Resource.Stone;
-    stone.amount = 0;
-    gold = Resource.Gold;
-    gold.amount = 100;
+    energy = new Resource('Energy', ENERGY_MAX, ENERGY_MAX);
+    wood = new Resource('Wood', 0);
+    metal = new Resource('Metal', 0);
+    stone = new Resource('Stone', 0);
+    gold = new Resource('Gold', 100);
     
     createMainGame();
     activeGame = Game.MAIN;
@@ -320,15 +340,16 @@ function createMainGame() {
     
     // -- start energy auto-regeneration -- //
     game.time.events.loop(
-        Phaser.Timer.SECOND * ENERGY_INTERVAL, increaseEnergy, this
+        Phaser.Timer.SECOND * ENERGY_INTERVAL, autoIncreaseEnergy, this
     );
 }
 
 
 // -- Mini-Game Functions --//
 function playWoodGame() {
-    if (isEnough(energy, GAME_COST)) {
-        decreaseResource(energy, GAME_COST);
+    if (energy.hasEnoughFor(GAME_COST)) {
+        energy.decrease(GAME_COST);
+        updateResourceMeter(energy);
         mainGameRemoveFocus();
         startWoodGame();
     } else {
@@ -338,8 +359,9 @@ function playWoodGame() {
 
 
 function playMetalGame() {
-    if (isEnough(energy, GAME_COST)) {
-        decreaseResource(energy, GAME_COST);
+    if (energy.hasEnoughFor(GAME_COST)) {
+        energy.decrease(GAME_COST);
+        updateResourceMeter(energy);
         //mainGameRemoveFocus();
         //startMetalGame();
         alert("Play metal game!");
@@ -350,8 +372,9 @@ function playMetalGame() {
 
 
 function playStoneGame() {
-    if (isEnough(energy, GAME_COST)) {
-        decreaseResource(energy, GAME_COST);
+    if (energy.hasEnoughFor(GAME_COST)) {
+        energy.decrease(GAME_COST);
+        updateResourceMeter(energy);
         //mainGameRemoveFocus();
         //startStoneGame();
         alert("Play stone game!");
@@ -387,41 +410,15 @@ function mainGameSetFocus() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Resource Functions ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function isEnough(resource, target)
-{
-    return resource.amount - target >= 0 ? true : false;
-}
-
-
-function increaseResource(resource, amount)
-{
-    resource.amount += amount;
-    updateResourceMeter(resource);
-}
-
-
-function decreaseResource(resource, amount)
-{
-    if (resource.amount - amount >= 0) {
-        resource.amount -= amount;
-        updateResourceMeter(resource);
-    }
-    else
-    {
-        alert("Cannot decrease " + resource.name + " below 0!");
-    }
-}
-
-
-function increaseEnergy()
+function autoIncreaseEnergy()
 {
     if (energy.amount + ENERGY_INCREMENT <= energy.max)
     {
-        energy.amount += ENERGY_INCREMENT;
+        energy.increase(ENERGY_INCREMENT);
     }
     else
     {
-        energy.amount = energy.max;
+        energy.amount = energy.max
     }
     updateResourceMeter(energy);
 }
