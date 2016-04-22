@@ -144,6 +144,7 @@ function preload() {
     game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
     game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
     game.load.atlas('wood_tiles', 'assets/sprites/wood_tiles.png', 'assets/sprites/wood_tiles.json');
+    game.load.atlas('stone_textures', 'assets/sprites/stone_textures.png', 'assets/sprites/stone_textures.json');
     
     // -- load audio -- //
     // TODO: add audio clips
