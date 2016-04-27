@@ -470,43 +470,149 @@ function startWoodGame() {
     activeGame = Game.WOOD;
     woodGame = game.add.group();
     
-    var frameShadow = game.make.sprite()
+    // -- Mini-Game Declarations -- //
+    const ROW_COUNT = 4,
+          COLUMN_COUNT = 5,
+          MATCH = 2;
+    
+    var selected;
+    
+    
+    // -- Build Game Board -- //
     var frame = game.make.tileSprite(
         game.world.centerX, game.world.centerY,
-        game.width - game.width * 0.1, game.height - game.height * 0.1,
-        'earth', 'earth_05.png'
+        game.width * 0.9, game.height * 0.9,
+        'wood_tiles', 'wood_tile_03.png'
     );
     frame.anchor.set(0.5);
-    frame.tileScale.set(0.33);
+    frame.tileScale.set(0.25);
     
     woodGame.add(frame);
     
     var table = game.make.tileSprite(
         game.world.centerX, game.world.centerY,
-        game.width - game.width * 0.13, game.height - game.height * 0.13,
-        'wood_tiles', 'wood_tile_01.png'
+        game.width * 0.87, game.height * 0.87,
+        'wood_tiles', 'wood_tile_02.png'
     );
     table.anchor.set(0.5);
-    table.tileScale.set(0.33);
+    table.tileScale.set(0.5);
     
     woodGame.add(table);
     
-    var button_exitWoodGame = game.make.button(
-        table.width,
-        game.height - table.height,
-        'sun',
-        exitWoodGame,
-        this,
-        'sun_01.png',
-        'sun_02.png',
-        'sun_03.png'
-    );
     
-    button_exitWoodGame.anchor.set(0.5);
-    button_exitWoodGame.scale.set(0.20);
+    // -- Randomize Cards -- //
+    var cardList = new Array(),
+        cardMatches = new Array(),
+        cardTotal = COLUMN_COUNT * ROW_COUNT;
     
-    woodGame.add(button_exitWoodGame);
+    for (var cardSet = 0; cardSet < MATCH; cardSet++) {
+        for (var cardMatch = 0; cardMatch < cardTotal / MATCH; cardMatch++) {
+            cardList.push(cardMatch);
+        }
+    }
+    
+    for (var i = 1; i <= cardTotal; i++) {
+        var randomIndex = game.rnd.integerInRange(0, cardList.length - 1);
+        var currentCard = cardList[randomIndex];
+        cardMatches.push(currentCard);
+        var cardIndex = cardList.indexOf(currentCard);
+        cardList.splice(cardIndex, 1);
+    }
+    
+    var cards = game.add.group();
+    var cardIndex = 0;
+    
+    for (var column = 1; column <= COLUMN_COUNT; column++)
+    {
+        for (var row = 1; row <= ROW_COUNT; row++)
+        {
+            var gridWidth = table.width - ROW_COUNT * 2,
+                gridHeight = table.height - COLUMN_COUNT * 2;
+            var gridPercentageX = 1 / ROW_COUNT * row,
+                gridPercentageY = 1 / COLUMN_COUNT * column;
+            
+            var card = game.make.group();
+            
+            // used for the actual index this will be added to
+            // the cards group, for later access by flipCard()
+            var index = game.make.text(0, 0, cardIndex);
+            index.visible = false;
+            
+            var face = game.make.sprite(
+                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
+                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                'wood_tiles', 'wood_tile_01.png'
+            );
+            face.width = 0;
+            face.height = (gridHeight / ROW_COUNT) - ROW_COUNT;
+            face.anchor.set(0.5);
+    
+            var back = game.make.sprite(
+                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
+                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                'wood_tiles', 'wood_tile_03.png'
+            );
+            back.width = (gridWidth / COLUMN_COUNT) - COLUMN_COUNT;
+            back.height = (gridHeight / ROW_COUNT) - ROW_COUNT;
+            back.anchor.set(0.5);
+            back.inputEnabled = true;
+            back.events.onInputDown.add(flipCard, card);
+    
+            // using to verify the card matches
+            var name = game.make.text(
+                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
+                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                "card" + cardMatches[cardIndex++]
+            );
+            name.anchor.set(0.5);
+            
+            card.add(index);
+            card.add(face);
+            card.add(back);
+            card.add(name);
+            cards.add(card);
+        }
+    }
+    woodGame.add(cards);
+    
+    
+    function flipCard() {
+        var index = this.children[0].text,
+            face = this.children[1],
+            back = this.children[2],
+            name = this.children[3].text;
+        
+        const CARD_WIDTH = back.width;
+        
+        game.make.tween(back).to({width: 0}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
+        game.make.tween(face).to({width: CARD_WIDTH}, 100, Phaser.Easing.Linear.None, true, 100, 0, false);
+        
+        if (selected == null) {
+            selected = this;
+        } else {
+            s_index = selected.children[0].text;
+            s_face = selected.children[1];
+            s_back = selected.children[2];
+            s_name = selected.children[3].text;
+            
+            if (name == s_name) {
+                // remove both cards
+                game.time.events.add(Phaser.Timer.SECOND, function() {
+                    face.kill();
+                    s_face.kill();
+                }, this);
+            } else {
+                // flip cards back
+                game.make.tween(s_face).to({width: 0}, 100, Phaser.Easing.Linear.None, true, 1000, 0, false);
+                game.make.tween(s_back).to({width: CARD_WIDTH}, 100, Phaser.Easing.Linear.None, true, 1100, 0, false);
+                game.make.tween(face).to({width: 0}, 100, Phaser.Easing.Linear.None, true, 1000, 0, false);
+                game.make.tween(back).to({width: CARD_WIDTH}, 100, Phaser.Easing.Linear.None, true, 1100, 0, false);
+            }
+            selected = null;
+        }
+    }
 }
+
 
 function exitWoodGame() {
     game.world.remove(woodGame);
