@@ -1,20 +1,21 @@
-/*
- *  Imperium
- *
- *  a Phaser game coded by Luke A Chase, Will Weathers, Charles Marion
- *  © 2016
- *
- */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *       I       M       P       E       R       I       U       M       *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                       *
+ *  A Phaser game coded by Luke A Chase, Will Weathers, Charles Marion   *
+ *  © 2016                                                               *
+ *                                                                       *
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
-        preload: preload, create: create, update: update
-    }
-);
-
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+            preload: preload, create: create, update: update
+        }
+    );
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Global Declarations ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 const ENERGY_MAX = 10;  // most energy you can have
 const ENERGY_INTERVAL = 10;  // how often energy autoIncreases
 const ENERGY_INCREMENT = 1;  // the amount energy autoIncreases
@@ -77,23 +78,22 @@ var GAME_COST = 1;
 
 var activeGame;
 var Game = {  // 'enum' used in update() method to only run active game
-        MAIN: 0,
+		MAIN: 0,
         WOOD: 1,
         METAL: 2,
         STONE: 3
     };
 
-// javascript addon filters
-var blurX,
-    blurY;
+var blurX,  // javascript addon filter
+	blurY;  // javascript addon filter
 
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Global Game Functions ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 // generate a random number between min and max
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -119,13 +119,13 @@ function p(number) {
 function paddedNumber(number) {
     return number < 10 ? "0" + number : number;
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Phaser.State Functions ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function preload() {
     // -- game settings -- //
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -192,13 +192,13 @@ function update() {
     
     // any universal (all games) update code goes here
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Main Game Functions ~                                      [mainGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function createMainGame() {
     var ground,
         grass,
@@ -404,13 +404,15 @@ function mainGameSetFocus() {
         }
     }, this);
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
-
-
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+//                                                                      //
+//          .-'-. .-'-. .-'-. .-'-. .-'-. .-'-. .-'-. .-'-.             //
+//          | I | | M | | P | | E | | R | | I | | U | | M |             //
+//          '-.-' '-.-' '-.-' '-.-' '-.-' '-.-' '-.-' '-.-'             //
+//                                                                      //
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Resource Functions ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function autoIncreaseEnergy()
 {
     if (energy.amount + ENERGY_INCREMENT <= energy.max)
@@ -446,10 +448,11 @@ function updateResourceMeter(resource)
             break;
     }
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // created groups for mini-games so on exit entire group can be removed
 // with the 'game.world.remove(gameName)' call
 
@@ -464,7 +467,7 @@ Make sure you create all objects with '<varName> = game.make.<objectType>()' and
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Wood Game Functions ~                                      [woodGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startWoodGame() {
     
     activeGame = Game.WOOD;
@@ -473,11 +476,12 @@ function startWoodGame() {
     // -- Mini-Game Declarations -- //
     const ROW_COUNT = 4,
           COLUMN_COUNT = 5,
-          MATCH = 2;
+          MATCH_COUNT = 2;  // # of like cards needed to consider match
     
+    const DISPLAY_DURATION = 1000;  // time to show cards before flip
+
     var selected;
     
-    const DISPLAY_DURATION = 1000;
     
     
     // -- Build Game Board -- //
@@ -502,25 +506,27 @@ function startWoodGame() {
     woodGame.add(table);
     
     
-    // -- Randomize Cards -- //
-    var cardList = new Array(),
-        cardMatches = new Array(),
-        cardTotal = COLUMN_COUNT * ROW_COUNT;
+    // -- Create Random Cards List -- //
+    var cardStartList = new Array(),
+        cardMatchList = new Array(),
+        TOTAL_NUM_CARDS = COLUMN_COUNT * ROW_COUNT;
     
-    for (var cardSet = 0; cardSet < MATCH; cardSet++) {
-        for (var cardMatch = 0; cardMatch < cardTotal / MATCH; cardMatch++) {
-            cardList.push(cardMatch);
+    for (var cardSet = 1; cardSet <= MATCH_COUNT; cardSet++) {
+        for (var cardMatch = 0; cardMatch < TOTAL_NUM_CARDS / MATCH_COUNT; cardMatch++) {
+            cardStartList.push(cardMatch);
         }
     }
     
-    for (var i = 1; i <= cardTotal; i++) {
-        var randomIndex = game.rnd.integerInRange(0, cardList.length - 1);
-        var currentCard = cardList[randomIndex];
-        cardMatches.push(currentCard);
-        var cardIndex = cardList.indexOf(currentCard);
-        cardList.splice(cardIndex, 1);
+    for (var i = 1; i <= TOTAL_NUM_CARDS; i++) {
+        var randomIndex = game.rnd.integerInRange(0, cardStartList.length - 1);
+        var newCard = cardStartList[randomIndex];
+        cardMatchList.push(newCard);
+        var usedCardIndex = cardStartList.indexOf(newCard);
+        cardStartList.splice(usedCardIndex, 1);
     }
     
+
+    // -- Build Cards From Random Cards List -- //
     var cards = game.add.group();
     var cardIndex = 0;
     
@@ -558,7 +564,7 @@ function startWoodGame() {
             back.height = (gridHeight / ROW_COUNT) - ROW_COUNT;
             back.anchor.set(0.5);
             back.inputEnabled = true;
-            back.events.onInputDown.add(flipCard, card);
+            back.events.onInputDown.add(checkCard, card);
     
             // using to verify the card matches
             var name = game.make.text(
@@ -578,45 +584,49 @@ function startWoodGame() {
     woodGame.add(cards);
     
     
-    function flipCard() {
+    function checkCard() {
         var index = this.children[0].text,
             face = this.children[1],
             back = this.children[2],
             name = this.children[3].text;
         
-        const CARD_WIDTH = back.width;
         
         animateFlip(back, face, 100, 0);
         
         if (selected == null) {
             selected = this;
         } else {
-            s_index = selected.children[0].text;
-            s_face = selected.children[1];
-            s_back = selected.children[2];
-            s_name = selected.children[3].text;
+            selected_index = selected.children[0].text;
+            selected_face = selected.children[1];
+            selected_back = selected.children[2];
+            selected_name = selected.children[3].text;
             
-            if (name == s_name) {
-                // remove both cards
+            if (name == selected_name) {
+                // remove matching cards
                 game.time.events.add(DISPLAY_DURATION * 0.6, function() {
                     animateMatch(face, DISPLAY_DURATION * 0.4);
-                    animateMatch(s_face, DISPLAY_DURATION * 0.4);
+                    animateMatch(selected_face, DISPLAY_DURATION * 0.4);
                     
                     game.time.events.add(DISPLAY_DURATION, function() {
-                        face.kill();
-                        s_face.kill();
+                        this.kill();
+                        selected.kill();  // will this work??? time to find out..........
+                        //face.kill();
+                        //selected_face.kill();
                     })
                 }, this);
             } else {
-                // flip cards back
+                // flip all cards back
                 animateFlip(face, back, 100, DISPLAY_DURATION);
-                animateFlip(s_face, s_back, 100, DISPLAY_DURATION);
+                animateFlip(selected_face, selected_back, 100, DISPLAY_DURATION);
             }
             selected = null;
         }
         
         function animateFlip(fromSide, toSide, duration, delay) {
+            const CARD_WIDTH = fromSide.width;
+
             game.make.tween(fromSide).to({width: 0}, duration, Phaser.Easing.Linear.None, true, delay, 0, false);
+
             // had to do a time.events delay here because was causing funky flip time otherwise
             game.time.events.add(delay, function() {
                 game.make.tween(toSide).to({width: CARD_WIDTH}, duration, Phaser.Easing.Linear.None, true, duration, 0, false);
@@ -624,7 +634,8 @@ function startWoodGame() {
         }
         
         function animateMatch(card, duration) {
-            game.make.tween(card).to({width: 0, height: 0}, duration, Phaser.Easing.Linear.None, true, 0, 0, false);
+            game.make.tween(card).to({width: 0, height: 0}, duration * 0.8, Phaser.Easing.Linear.None, true, 0, 0, false)
+                .to({width: game.world.width, height: game.world.width}, duration * 0.2, Phaser.Easing.Linear.None, true, 0, 0, false);
         }
     }
 }
@@ -634,13 +645,13 @@ function exitWoodGame() {
     game.world.remove(woodGame);
     mainGameSetFocus();
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Metal Game Functions ~                                    [metalGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startMetalGame() {
     activeGame = Game.METAL;
     metalGame = game.add.group();
@@ -654,13 +665,13 @@ function exitMetalGame() {
     game.world.remove(metalGame);
     mainGameSetFocus();
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ Stone Game Functions ~                                    [stoneGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startStoneGame() {
     activeGame = Game.STONE;
     stoneGame = game.add.group();
@@ -675,5 +686,5 @@ function exitStoneGame() {
     game.world.remove(stoneGame);
     mainGameSetFocus();
 }
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
