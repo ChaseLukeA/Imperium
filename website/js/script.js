@@ -376,8 +376,8 @@ function playStoneGame() {
     if (energy.hasEnoughFor(GAME_COST)) {
         energy.decrease(GAME_COST);
         updateResourceMeter(energy);
-        //mainGameRemoveFocus();
-        //startStoneGame();
+        mainGameRemoveFocus();
+        startStoneGame();
         alert("Play stone game!");
     } else {
         alert("Not enough energy!");
@@ -678,6 +678,36 @@ function startStoneGame() {
     
     //something changed here
     // YOUR MINI-GAME CODE!!!
+    
+    const MATCH_PAIRS = 2;
+    const NUMBER_COLUMNS = 4;
+    const NUMBER_ROWS = 7;
+        
+        
+    var selectedGroup;
+    
+    var tableRow = game.make.tileSprite(
+        game.world.centerX, game.world.centerY,
+        game.width * .84, game.height * .64,
+        'stone_textures', 'obj_stoneblock001.png'
+    );
+    
+    tableRow.anchor.set(0.5);
+    
+    stoneGame.add(tableRow);
+    
+    var cards = new Array();
+    var cardsMatch = new Array();
+    var cardsTotal = NUMBER_COLUMNS * NUMBER_ROWS;
+    
+    for (var cardsSet = 0; cards < MATCH_PAIRS; cardsSet++) {
+        
+        for (var match = 0; match < cardsTotal / MATCH_PAIRS; match++) {
+            
+            cards.push(match);
+        }
+        
+    }
     
     // call exitStoneGame() when the game is over
 }
