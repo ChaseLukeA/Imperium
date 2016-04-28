@@ -376,8 +376,8 @@ function playStoneGame() {
     if (energy.hasEnoughFor(GAME_COST)) {
         energy.decrease(GAME_COST);
         updateResourceMeter(energy);
-        //mainGameRemoveFocus();
-        //startStoneGame();
+        mainGameRemoveFocus();
+        startStoneGame();
         alert("Play stone game!");
     } else {
         alert("Not enough energy!");
