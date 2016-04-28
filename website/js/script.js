@@ -477,6 +477,8 @@ function startWoodGame() {
     
     var selected;
     
+    const DISPLAY_DURATION = 1000;
+    
     
     // -- Build Game Board -- //
     var frame = game.make.tileSprite(
@@ -584,8 +586,7 @@ function startWoodGame() {
         
         const CARD_WIDTH = back.width;
         
-        game.make.tween(back).to({width: 0}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
-        game.make.tween(face).to({width: CARD_WIDTH}, 100, Phaser.Easing.Linear.None, true, 100, 0, false);
+        animateFlip(back, face, 100, 0);
         
         if (selected == null) {
             selected = this;
@@ -597,18 +598,33 @@ function startWoodGame() {
             
             if (name == s_name) {
                 // remove both cards
-                game.time.events.add(Phaser.Timer.SECOND, function() {
-                    face.kill();
-                    s_face.kill();
+                game.time.events.add(DISPLAY_DURATION * 0.6, function() {
+                    animateMatch(face, DISPLAY_DURATION * 0.4);
+                    animateMatch(s_face, DISPLAY_DURATION * 0.4);
+                    
+                    game.time.events.add(DISPLAY_DURATION, function() {
+                        face.kill();
+                        s_face.kill();
+                    })
                 }, this);
             } else {
                 // flip cards back
-                game.make.tween(s_face).to({width: 0}, 100, Phaser.Easing.Linear.None, true, 1000, 0, false);
-                game.make.tween(s_back).to({width: CARD_WIDTH}, 100, Phaser.Easing.Linear.None, true, 1100, 0, false);
-                game.make.tween(face).to({width: 0}, 100, Phaser.Easing.Linear.None, true, 1000, 0, false);
-                game.make.tween(back).to({width: CARD_WIDTH}, 100, Phaser.Easing.Linear.None, true, 1100, 0, false);
+                animateFlip(face, back, 100, DISPLAY_DURATION);
+                animateFlip(s_face, s_back, 100, DISPLAY_DURATION);
             }
             selected = null;
+        }
+        
+        function animateFlip(fromSide, toSide, duration, delay) {
+            game.make.tween(fromSide).to({width: 0}, duration, Phaser.Easing.Linear.None, true, delay, 0, false);
+            // had to do a time.events delay here because was causing funky flip time otherwise
+            game.time.events.add(delay, function() {
+                game.make.tween(toSide).to({width: CARD_WIDTH}, duration, Phaser.Easing.Linear.None, true, duration, 0, false);
+            });
+        }
+        
+        function animateMatch(card, duration) {
+            game.make.tween(card).to({width: 0, height: 0}, duration, Phaser.Easing.Linear.None, true, 0, 0, false);
         }
     }
 }
