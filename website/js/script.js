@@ -1,22 +1,47 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ *       I       M       P       E       R       I       U       M       *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+\\                                                                      //
+//           .-'-. .-'-. .-'-. .-'-. .-'-. .-'-. .-'-. .-'-.            \\
+\\           | I | | M | | P | | E | | R | | I | | U | | M |            //
+//           '-.-' '-.-' '-.-' '-.-' '-.-' '-.-' '-.-' '-.-'            \\
+\\                                                                      //
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *       I       M       P       E       R       I       U       M       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                       *
- *  A Phaser game coded by Luke A Chase, Will Weathers, Charles Marion   *
- *  © 2016                                                               *
+ *     A Phaser game coded by Luke A Chase,                              *
+ *                                        Will Weathers,                 *
+ *                                                     Charles Marion    *
+ *                   © 2016                                              *
  *                                                                       *
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *       I       M       P       E       R       I       U       M       *
+  \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
-            preload: preload, create: create, update: update
-        }
-    );
+                    var game = new Phaser.Game(
+                        800,
+                        600,
+                        Phaser.AUTO,
+                        '',
+                        {
+                            preload: preload,
+                            create: create,
+                            update: update
+                        }
+                    );           //          ;(
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Global Declarations ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Global Declarations                                                  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-const ENERGY_MAX = 10;  // most energy you can have
+const ENERGY_MAX = 10;       // most energy you can have
 const ENERGY_INTERVAL = 10;  // how often energy autoIncreases
 const ENERGY_INCREMENT = 1;  // the amount energy autoIncreases
 
@@ -87,13 +112,15 @@ var Game = {  // 'enum' used in update() method to only run active game
 var blurX,  // javascript addon filter
 	blurY;  // javascript addon filter
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Global Game Functions ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Global Game Functions                                                *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 // generate a random number between min and max
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -119,13 +146,15 @@ function p(number) {
 function paddedNumber(number) {
     return number < 10 ? "0" + number : number;
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Phaser.State Functions ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Phaser.State Functions                                               *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function preload() {
     // -- game settings -- //
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -192,13 +221,15 @@ function update() {
     
     // any universal (all games) update code goes here
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Main Game Functions ~                                      [mainGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Main Game Functions                                      [mainGame]  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function createMainGame() {
     var ground,
         grass,
@@ -346,7 +377,13 @@ function createMainGame() {
 }
 
 
-// -- Mini-Game Functions --//
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Resource Mini-Game Start/End Functions                   [mainGame]  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function playWoodGame() {
     if (energy.hasEnoughFor(GAME_COST)) {
         energy.decrease(GAME_COST);
@@ -376,8 +413,8 @@ function playStoneGame() {
     if (energy.hasEnoughFor(GAME_COST)) {
         energy.decrease(GAME_COST);
         updateResourceMeter(energy);
-        mainGameRemoveFocus();
-        startStoneGame();
+        //mainGameRemoveFocus();
+        //startStoneGame();
         alert("Play stone game!");
     } else {
         alert("Not enough energy!");
@@ -404,33 +441,27 @@ function mainGameSetFocus() {
         }
     }, this);
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-//                                                                      //
-//          .-'-. .-'-. .-'-. .-'-. .-'-. .-'-. .-'-. .-'-.             //
-//          | I | | M | | P | | E | | R | | I | | U | | M |             //
-//          '-.-' '-.-' '-.-' '-.-' '-.-' '-.-' '-.-' '-.-'             //
-//                                                                      //
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Resource Functions ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function autoIncreaseEnergy()
-{
-    if (energy.amount + ENERGY_INCREMENT <= energy.max)
-    {
+
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Resource/Meter Functions                                 [mainGame]  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function autoIncreaseEnergy() {
+    if (energy.amount + ENERGY_INCREMENT <= energy.max) {
         energy.increase(ENERGY_INCREMENT);
-    }
-    else
-    {
+    } else {
         energy.amount = energy.max
     }
     updateResourceMeter(energy);
 }
 
 
-function updateResourceMeter(resource)
-{
-    switch (resource.name)
-    {
+function updateResourceMeter(resource) {
+    switch (resource.name) {
         case 'Energy':
             energyMeter.setText(resource.name + ": " + resource.amount);
             break;
@@ -448,26 +479,32 @@ function updateResourceMeter(resource)
             break;
     }
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// created groups for mini-games so on exit entire group can be removed
-// with the 'game.world.remove(gameName)' call
-
-/*
-
-All your mini-game code needs to go in the appropriate 'start<mini>Game()' method and will run separate from the mainGame
-
-Make sure you create all objects with '<varName> = game.make.<objectType>()' and then add it to your mini-game with '<mini>Game.add(<varName>)'
-
-*/
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Wood Game Functions ~                                      [woodGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Here are created groups for mini-games so on exit the entire group can
+be removed with a 'game.world.remove(gameName)' call
+
+All mini-game code needs to go in the appropriate 'start<mini>Game()'
+method and will run separate from the mainGame
+
+Make sure you create objects with '<varName> = game.make.<objectType>()'
+and then add it to your mini-game with '<mini>Game.add(<varName>)'
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+
+
+//                       Created by Luke A Chase                       \\
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Wood Game Functions                                      [woodGame]  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startWoodGame() {
     
     activeGame = Game.WOOD;
@@ -570,7 +607,7 @@ function startWoodGame() {
             var name = game.make.text(
                 Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
                 Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
-                "card" + cardMatches[cardIndex++]
+                "card" + cardMatchList[cardIndex++]
             );
             name.anchor.set(0.5);
             
@@ -596,10 +633,11 @@ function startWoodGame() {
         if (selected == null) {
             selected = this;
         } else {
-            selected_index = selected.children[0].text;
-            selected_face = selected.children[1];
-            selected_back = selected.children[2];
-            selected_name = selected.children[3].text;
+            
+            var selected_index = selected.children[0].text,
+                selected_face = selected.children[1],
+                selected_back = selected.children[2],
+                selected_name = selected.children[3].text;
             
             if (name == selected_name) {
                 // remove matching cards
@@ -608,10 +646,8 @@ function startWoodGame() {
                     animateMatch(selected_face, DISPLAY_DURATION * 0.4);
                     
                     game.time.events.add(DISPLAY_DURATION, function() {
-                        this.kill();
-                        selected.kill();  // will this work??? time to find out..........
-                        //face.kill();
-                        //selected_face.kill();
+                        face.kill();
+                        selected_face.kill();
                     })
                 }, this);
             } else {
@@ -626,16 +662,11 @@ function startWoodGame() {
             const CARD_WIDTH = fromSide.width;
 
             game.make.tween(fromSide).to({width: 0}, duration, Phaser.Easing.Linear.None, true, delay, 0, false);
-
-            // had to do a time.events delay here because was causing funky flip time otherwise
-            game.time.events.add(delay, function() {
-                game.make.tween(toSide).to({width: CARD_WIDTH}, duration, Phaser.Easing.Linear.None, true, duration, 0, false);
-            });
+            game.make.tween(toSide).to({width: CARD_WIDTH}, duration, Phaser.Easing.Linear.None, true, delay + duration, 0, false);
         }
         
         function animateMatch(card, duration) {
-            game.make.tween(card).to({width: 0, height: 0}, duration * 0.8, Phaser.Easing.Linear.None, true, 0, 0, false)
-                .to({width: game.world.width, height: game.world.width}, duration * 0.2, Phaser.Easing.Linear.None, true, 0, 0, false);
+            game.make.tween(card).to({width: 0, height: 0}, duration, Phaser.Easing.Linear.None, true, 0, 0, false);
         }
     }
 }
@@ -645,13 +676,15 @@ function exitWoodGame() {
     game.world.remove(woodGame);
     mainGameSetFocus();
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Metal Game Functions ~                                    [metalGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Metal Game Functions                                    [metalGame]  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startMetalGame() {
     activeGame = Game.METAL;
     metalGame = game.add.group();
@@ -665,26 +698,23 @@ function exitMetalGame() {
     game.world.remove(metalGame);
     mainGameSetFocus();
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Stone Game Functions ~                                    [stoneGame]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*       I       M       P       E       R       I       U       M       *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
+*  Stone Game Functions                                    [stoneGame]  *
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function startStoneGame() {
     activeGame = Game.STONE;
     stoneGame = game.add.group();
     
-    //something changed here
     // YOUR MINI-GAME CODE!!!
-    
-    const MATCH_PAIRS = 2;
-    const NUMBER_COLUMNS = 4;
-    const NUMBER_ROWS = 7;
-        
-        
-    var selectedGroup;
+    // ITS OK TO KEEP THE GAME BACKGROUND FROM
+    // THE WOODGAME EXAMPLE, ALL OTHER CODE AFTER
+    // THIS MUST BE YOUR ORIGINAL CODE
     
     var tableRow = game.make.tileSprite(
         game.world.centerX, game.world.centerY,
@@ -696,19 +726,6 @@ function startStoneGame() {
     
     stoneGame.add(tableRow);
     
-    var cards = new Array();
-    var cardsMatch = new Array();
-    var cardsTotal = NUMBER_COLUMNS * NUMBER_ROWS;
-    
-    for (var cardsSet = 0; cards < MATCH_PAIRS; cardsSet++) {
-        
-        for (var match = 0; match < cardsTotal / MATCH_PAIRS; match++) {
-            
-            cards.push(match);
-        }
-        
-    }
-    
     // call exitStoneGame() when the game is over
 }
 
@@ -716,5 +733,3 @@ function exitStoneGame() {
     game.world.remove(stoneGame);
     mainGameSetFocus();
 }
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
