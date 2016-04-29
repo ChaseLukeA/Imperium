@@ -46,7 +46,7 @@ const ENERGY_INTERVAL = 10;  // how often energy autoIncreases
 const ENERGY_INCREMENT = 1;  // the amount energy autoIncreases
 
 /* --------------------------------------------------------------
- * Resource is used to build new resources which have thier own
+ * Resource is used to build new resources which have their own
  * properties and methods, e.g. energy, wood, metal, stone, gold;
  * --------------------------------------------------------------
  * Example:
@@ -63,21 +63,68 @@ var Resource = function (_name, _amount, _max) {
     this.name = _name;
     this.amount = _amount;
     this.max = (_max == null ? 0 : _max);
+    this.delta = Delta.NoChange;
     
     this.increase = function(value) {
         this.amount += value;
-    },
+        this.delta = Delta.Increased;
+    };
+
     this.decrease = function(value) {
         if (this.amount - value >= 0) {
             this.amount -= value;
+            this.delta = Delta.Decreased;
         } else {
-            alert(this.name + " cannot go below zero!");
+            alert("Error! " + this.name + " cannot go below zero!");
+            this.delta = Delta.NoChange;
         }
-    },
+    };
+
     this.hasEnoughFor = function(value) {
         return this.amount - value >= 0;
-    }
+    };
 }
+
+/* --------------------------------------------------------------
+ * Calamity is used to build new troubles which have their own
+ * properties and methods, e.g. enemies, disasters, plagues
+ * --------------------------------------------------------------
+ * Examples:
+ *   var gang = new Calamity('Gang', 3, true);
+ *   if (gang.active) {
+ *   	energy.decrease(gang.trouble);
+ *   }
+ *   
+ *   
+ *   var air = new Calamity('Air', 1, true);
+ *   var water = new Calamity('Water', 1, true);
+ *   
+ *   if (air.active && water.active) {
+ *   	// air & water makes metal rust, both both
+ *   	// alone are harmless!
+ *   	metal.decrease(air.trouble + water.trouble);
+ *   }
+ */
+var Trouble = function (_name, _trouble, _active, _settings) {
+	this.name = _name;
+
+	// the amount of illness/damage/decrease Calamity causes;
+	this.trouble = _trouble;
+
+	// whether or not this Calamity is alive and active, or dormant
+	this.active = _active;
+
+	// optional 'other settings' object literal you can pass in
+	// as other properties this Calamity can have, e.g.
+	// { weakness: sunlight, lifeExpecancy: 20, ... }
+	this.settings = { _settings };  
+}
+
+const Delta = {
+		Decreased: -1,
+		NoChange: 0,
+		Increased: 1
+	};
 
 var energy,
     energyMeter;
@@ -112,10 +159,6 @@ var Game = {  // 'enum' used in update() method to only run active game
 var blurX,  // javascript addon filter
 	blurY;  // javascript addon filter
 
-var WoodGame = {
-        Termites: false,
-        Fire: false,
-    };
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
@@ -213,11 +256,23 @@ function update() {
             break;
         case Game.WOOD:
             // any woodGame -specific update code goes here
-            if (WoodGame.Termites = true) {
-                wood.decrease(1);
+            if (termites.active = true) {
+            	if (nematodes.active = true) {
+            		console.log("Ye have nematodes living in ye wood so thy termites cannot thrive.")
+            	} else {
+            		console.log("Ye wood stores be infested with termites! Seek thy nematodes to ruin them.")
+            		wood.decrease(termites.trouble);
+            		updateResourceMeter(wood);
+            	}
             }
-            if (WoodGame.Fire = true) {
-                wood.decrease(1);
+            if (fire.active = true) {
+            	if (water.active = true) {
+            		console.log("Ye wood be wet so fire cannot be living here.")
+            	} else {
+            		console.log("Thy wood be ablaze! Seek thee water to purge this calamity!")
+            		wood.decrease(fire.trouble);
+            		updateResourceMeter(wood);
+            	}
             }
             break;
         case Game.METAL:
@@ -331,8 +386,10 @@ function createMainGame() {
     
     // -- create energy bar -- //
     energyMeter = game.make.text(
-        game.world.width * 0.04,
-        game.world.height * 0.89,
+        //game.world.width * 0.04,
+    	game.world.width * 0.05,
+        //game.world.height * 0.89,
+        game.world.height * 0.95,
         "",
         {fontSize: '20px', fill: '#fff', align: 'center'}
     );
@@ -341,8 +398,10 @@ function createMainGame() {
     
     // -- create wood bar -- //
     woodMeter = game.make.text(
-        game.world.width * 0.86,
-        game.world.height * 0.83,
+        //game.world.width * 0.86,
+    	game.world.width * 0.25,
+        //game.world.height * 0.83,
+        game.world.height * 0.95,
         "",
         {fontSize: '20px', fill: '#fff', align: 'center'}
     );
@@ -351,8 +410,10 @@ function createMainGame() {
     
     // -- create metal bar -- //
     metalMeter = game.make.text(
-        game.world.width * 0.86,
-        game.world.height * 0.87,
+        //game.world.width * 0.86,
+    	game.world.width * 0.45,
+        //game.world.height * 0.87,
+        game.world.height * 0.95,
         "",
         {fontSize: '20px', fill: '#fff', align: 'center'}
     );
@@ -361,8 +422,10 @@ function createMainGame() {
     
     // -- create stone bar -- //
     stoneMeter = game.make.text(
-        game.world.width * 0.86,
-        game.world.height * 0.91,
+        //game.world.width * 0.86,
+    	game.world.width * 0.65,
+        //game.world.height * 0.91,
+        game.world.height * 0.95,
         "",
         {fontSize: '20px', fill: '#fff', align: 'center'}
     );
@@ -371,7 +434,9 @@ function createMainGame() {
     
     // -- create gold bar -- //
     goldMeter = game.make.text(
-        game.world.width * 0.86,
+        //game.world.width * 0.86,
+    	game.world.width * 0.85,
+        //game.world.height * 0.95,
         game.world.height * 0.95,
         "",
         {fontSize: '20px', fill: '#fff', align: 'center'}
@@ -433,7 +498,9 @@ function playStoneGame() {
 
 function mainGameRemoveFocus() {
     mainGame.forEach(function(obj) {
-        obj.filters = [blurX, blurY];
+    	if (obj.type != Phaser.TEXT) {   ///// will this work or not??????????????????????????
+    		obj.filters = [blurX, blurY];
+    	}
         if (obj.type == Phaser.BUTTON) {
             obj.kill();
         }
@@ -473,20 +540,39 @@ function updateResourceMeter(resource) {
     switch (resource.name) {
         case 'Energy':
             energyMeter.setText(resource.name + ": " + resource.amount);
+            animateMeterUpdate(energyMeter, resource.delta);
             break;
         case 'Wood':
             woodMeter.setText(resource.name + ": " + resource.amount);
+            animateMeterUpdate(woodMeter, resource.delta);
             break;
         case 'Metal':
             metalMeter.setText(resource.name + ": " + resource.amount);
+            animateMeterUpdate(metalMeter, resource.delta);
             break;
         case 'Stone':
             stoneMeter.setText(resource.name + ": " + resource.amount);
+            animateMeterUpdate(stoneMeter, resource.delta);
             break;
         case 'Gold':
             goldMeter.setText(resource.name + ": " + resource.amount);
+            animateMeterUpdate(goldMeter, resource.delta);
             break;
     }
+}
+
+
+function animateMeterUpdate(resourceMeter, delta) {
+	if (delta == Delta.Decrease) {
+		// make resource color temporarily red and shrink size
+		game.make.tween(resourceMeter).to({scale: 0.875}, 50, Phaser.Easing.Default, true, 0, 0, false);
+	}
+	if (delta == Delta.Increase) {
+		// make resource color temporarily green and grow size
+		game.make.tween(resourceMeter).to({scale: 1.125}, 50, Phaser.Easing.Default, true, 0, 0, false);
+	}
+	// make resource color default again
+    game.make.tween(resourceMeter).to({scale: 1.0}, 50, Phaser.Easing.Default, true, 50, 0, false);
 }
 
 
@@ -512,8 +598,16 @@ and then add it to your mini-game with '<mini>Game.add(<varName>)'
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
 *       I       M       P       E       R       I       U       M       *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
-*  Wood Game Functions                                      [woodGame]  *
+*  Wood Game Declarations and Functions                     [woodGame]  *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+var fire = new Calamity('Fire', 0.25, false);
+var water = new Calamity('Water', 0, false);
+var termites = new Calamity('Termites', 0.125, false);
+var nematodes = new Calamity('Nematodes', -0.125, false);
+
+
+
 function startWoodGame() {
     
     activeGame = Game.WOOD;
@@ -686,6 +780,21 @@ function startWoodGame() {
                     selected_name = selected.children[3].text;
 
                 if (name == selected_name) {
+                	if (name == 'termites') {
+                		termites.active = true;
+                	}
+                	if (name == 'nematodes') {
+                		nematodes.active = true;
+                	}
+                	if (name == 'fire') {
+                		fire.active = true;
+                	}
+                	if (name == 'water') {
+                		water.active = true;
+                	}
+                	
+                	
+                	
                     // remove matching cards
                     game.time.events.add(DISPLAY_DURATION * 0.6, function() {
                         animateMatch(face, DISPLAY_DURATION * 0.4);
@@ -736,8 +845,10 @@ function exitWoodGame() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
 *       I       M       P       E       R       I       U       M       *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
-*  Metal Game Functions                                    [metalGame]  *
+*  Metal Game Declarations and Functions                   [metalGame]  *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
 function startMetalGame() {
     activeGame = Game.METAL;
     metalGame = game.add.group();
@@ -758,8 +869,10 @@ function exitMetalGame() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
 *       I       M       P       E       R       I       U       M       *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
-*  Stone Game Functions                                    [stoneGame]  *
+*  Stone Game Declarations and Functions                   [stoneGame]  *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
 function startStoneGame() {
     activeGame = Game.STONE;
     stoneGame = game.add.group();
