@@ -112,7 +112,10 @@ var Game = {  // 'enum' used in update() method to only run active game
 var blurX,  // javascript addon filter
 	blurY;  // javascript addon filter
 
-
+var WoodGame = {
+        Termites: false,
+        Fire: false,
+    };
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
@@ -210,6 +213,12 @@ function update() {
             break;
         case Game.WOOD:
             // any woodGame -specific update code goes here
+            if (WoodGame.Termites = true) {
+                wood.decrease(1);
+            }
+            if (WoodGame.Fire = true) {
+                wood.decrease(1);
+            }
             break;
         case Game.METAL:
             // any metalGame -specific update code goes here
@@ -519,6 +528,33 @@ function startWoodGame() {
 
     var selected;
     
+    var numberOfCardsShowing = 0;
+    
+    function getType(index) {
+      switch (index) {
+          case 0:
+              return 'cord_01';
+          case 1:
+              return 'cord_02';
+          case 2:
+              return 'cord_03';
+          case 3:
+              return 'cord_04';
+          case 4:
+              return 'cord_05';
+          case 5:
+              return 'cord_06';
+          case 6:
+              return 'termites';
+          case 7:
+              return 'nematodes';
+          case 8:
+              return 'fire';
+          case 9:
+              return 'water';
+      }
+    };
+    
     
     
     // -- Build Game Board -- //
@@ -575,6 +611,8 @@ function startWoodGame() {
                 gridHeight = table.height - COLUMN_COUNT * 2;
             var gridPercentageX = 1 / ROW_COUNT * row,
                 gridPercentageY = 1 / COLUMN_COUNT * column;
+            var cardWidth = Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
+                cardHeight = Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT;
             
             var card = game.make.group();
             
@@ -607,7 +645,7 @@ function startWoodGame() {
             var name = game.make.text(
                 Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
                 Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
-                "card" + cardMatchList[cardIndex++]
+                getType(cardMatchList[cardIndex++])
             );
             name.anchor.set(0.5);
             
@@ -621,52 +659,67 @@ function startWoodGame() {
     woodGame.add(cards);
     
     
+    // pull the width of the first card's back
+    const CARD_WIDTH = cards.children[0].children[2].width;
+    
+    
     function checkCard() {
-        var index = this.children[0].text,
-            face = this.children[1],
-            back = this.children[2],
-            name = this.children[3].text;
-        
-        
-        animateFlip(back, face, 100, 0);
-        
-        if (selected == null) {
-            selected = this;
-        } else {
-            
-            var selected_index = selected.children[0].text,
-                selected_face = selected.children[1],
-                selected_back = selected.children[2],
-                selected_name = selected.children[3].text;
-            
-            if (name == selected_name) {
-                // remove matching cards
-                game.time.events.add(DISPLAY_DURATION * 0.6, function() {
-                    animateMatch(face, DISPLAY_DURATION * 0.4);
-                    animateMatch(selected_face, DISPLAY_DURATION * 0.4);
-                    
-                    game.time.events.add(DISPLAY_DURATION, function() {
-                        face.kill();
-                        selected_face.kill();
-                    })
-                }, this);
+        if (numberOfCardsShowing < 2)
+        {
+            var index = this.children[0].text,
+                face = this.children[1],
+                back = this.children[2],
+                name = this.children[3].text;
+
+            animateFlip(back, face, 100, 0);
+
+            if (selected == null) {
+                numberOfCardsShowing++;
+
+                selected = this;
             } else {
-                // flip all cards back
-                animateFlip(face, back, 100, DISPLAY_DURATION);
-                animateFlip(selected_face, selected_back, 100, DISPLAY_DURATION);
+                numberOfCardsShowing++;
+
+                var selected_index = selected.children[0].text,
+                    selected_face = selected.children[1],
+                    selected_back = selected.children[2],
+                    selected_name = selected.children[3].text;
+
+                if (name == selected_name) {
+                    // remove matching cards
+                    game.time.events.add(DISPLAY_DURATION * 0.6, function() {
+                        animateMatch(face, DISPLAY_DURATION * 0.4);
+                        animateMatch(selected_face, DISPLAY_DURATION * 0.4);
+
+                        game.time.events.add(DISPLAY_DURATION, function() {
+                            face.kill();
+                            selected_face.kill();
+                            numberOfCardsShowing = 0;
+                        })
+                    }, this);
+                } else {
+                    // flip all cards back
+                    animateFlip(face, back, 100, DISPLAY_DURATION);
+                    animateFlip(selected_face, selected_back, 100, DISPLAY_DURATION);
+                    waitFor(DISPLAY_DURATION, function() {
+                        numberOfCardsShowing = 0;
+                    });
+                }
+                selected = null;
             }
-            selected = null;
         }
         
         function animateFlip(fromSide, toSide, duration, delay) {
-            const CARD_WIDTH = fromSide.width;
-
-            game.make.tween(fromSide).to({width: 0}, duration, Phaser.Easing.Linear.None, true, delay, 0, false);
-            game.make.tween(toSide).to({width: CARD_WIDTH}, duration, Phaser.Easing.Linear.None, true, delay + duration, 0, false);
+            game.make.tween(fromSide).to({width: 0}, duration, Phaser.Easing.Default, true, delay, 0, false);
+            game.make.tween(toSide).to({width: CARD_WIDTH}, duration, Phaser.Easing.Default, true, delay + duration, 0, false);
         }
         
         function animateMatch(card, duration) {
-            game.make.tween(card).to({width: 0, height: 0}, duration, Phaser.Easing.Linear.None, true, 0, 0, false);
+            game.make.tween(card).to({width: 0, height: 0}, duration, Phaser.Easing.Default, true, 0, 0, false);
+        }
+        
+        function waitFor(duration, callback) {
+            game.time.events.add(duration, callback);
         }
     }
 }
