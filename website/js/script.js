@@ -559,39 +559,53 @@ function updateResourceMeter(resource) {
     switch (resource.name) {
         case 'Energy':
             energyMeter.setText(resource.name + ": " + resource.amount);
-            //animateMeterUpdate(energyMeter, resource.delta);
+            animateMeterUpdate(energyMeter, resource.delta);
             break;
         case 'Wood':
             woodMeter.setText(resource.name + ": " + resource.amount);
-            //animateMeterUpdate(woodMeter, resource.delta);
+            animateMeterUpdate(woodMeter, resource.delta);
             break;
         case 'Metal':
             metalMeter.setText(resource.name + ": " + resource.amount);
-            //animateMeterUpdate(metalMeter, resource.delta);
+            animateMeterUpdate(metalMeter, resource.delta);
             break;
         case 'Stone':
             stoneMeter.setText(resource.name + ": " + resource.amount);
-            //animateMeterUpdate(stoneMeter, resource.delta);
+            animateMeterUpdate(stoneMeter, resource.delta);
             break;
         case 'Gold':
             goldMeter.setText(resource.name + ": " + resource.amount);
-            //animateMeterUpdate(goldMeter, resource.delta);
+            animateMeterUpdate(goldMeter, resource.delta);
             break;
     }
 }
 
 
 function animateMeterUpdate(resourceMeter, delta) {
-	if (delta == Delta.Decrease) {
+    var currentScale = resourceMeter.scale;
+    
+	if (delta == Delta.Decreased) {
 		// make resource color temporarily red and shrink size
-		game.make.tween(resourceMeter).to({scale: 0.875}, 50, Phaser.Easing.Default, true, 0, 0, false);
+        resourceMeter.scale.x = currentScale.x - 0.025;
+        resourceMeter.scale.y = currentScale.y - 0.025;
+        resourceMeter.fill = "#fcc";
+        waitFor(250, function() {
+            resourceMeter.scale.x = currentScale.x + 0.025;
+            resourceMeter.scale.y = currentScale.y + 0.025;
+            resourceMeter.fill = "#fff";
+        });
 	}
-	if (delta == Delta.Increase) {
+	if (delta == Delta.Increased) {
 		// make resource color temporarily green and grow size
-		game.make.tween(resourceMeter).to({scale: 1.125}, 50, Phaser.Easing.Default, true, 0, 0, false);
+        resourceMeter.scale.x = currentScale.x + 0.025;
+        resourceMeter.scale.y = currentScale.y + 0.025;
+        resourceMeter.fill = "#cfc";
+        waitFor(250, function() {
+            resourceMeter.scale.x = currentScale.x - 0.025;
+            resourceMeter.scale.y = currentScale.y - 0.025;
+            resourceMeter.fill = "#fff";
+        });
 	}
-	// make resource color default again
-    game.make.tween(resourceMeter).to({scale: 1.0}, 50, Phaser.Easing.Default, true, 50, 0, false);
 }
 
 
@@ -622,7 +636,7 @@ and then add it to your mini-game with '<mini>Game.add(<varName>)'
 
 var fire = new Calamity('Fire', 1, 1000, false);
 var water = new Calamity('Water', 0, 0, false);
-var termites = new Calamity('Termites', 1, 1500, false);
+var termites = new Calamity('Termites', 1, 2000, false);
 var nematodes = new Calamity('Nematodes', 0, 0, false);
 
 var fireTimer = 0,
