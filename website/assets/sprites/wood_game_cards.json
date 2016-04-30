@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "cord_01.png",
+	"frame": {"x":1,"y":1,"w":512,"h":512},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":512},
+	"sourceSize": {"w":512,"h":512}
+},
+{
+	"filename": "cord_02.png",
+	"frame": {"x":1,"y":1029,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "cord_03.png",
+	"frame": {"x":513,"y":1029,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "cord_04.png",
+	"frame": {"x":1025,"y":1029,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "cord_05.png",
+	"frame": {"x":1537,"y":1,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "cord_06.png",
+	"frame": {"x":1029,"y":513,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+},
+{
+	"filename": "fire.png",
+	"frame": {"x":1,"y":515,"w":512,"h":512},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":512},
+	"sourceSize": {"w":512,"h":512}
+},
+{
+	"filename": "nematodes.png",
+	"frame": {"x":515,"y":1,"w":512,"h":512},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":512},
+	"sourceSize": {"w":512,"h":512}
+},
+{
+	"filename": "termites.png",
+	"frame": {"x":515,"y":515,"w":512,"h":512},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":512},
+	"sourceSize": {"w":512,"h":512}
+},
+{
+	"filename": "water.png",
+	"frame": {"x":1537,"y":1025,"w":510,"h":510},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":510,"h":510},
+	"sourceSize": {"w":510,"h":510}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "wood_game_cards.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":1540},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:2ff723ad5a9d1320ab81f1630d55dd4c:211f28568b6f614a34d990b7688172a9:c3040d7a7b02ed86ed22a184e0081d52$"
+}
+}

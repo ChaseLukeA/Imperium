@@ -42,7 +42,7 @@
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 const ENERGY_MAX = 10;       // most energy you can have
-const ENERGY_INTERVAL = 10;  // how often energy autoIncreases
+const ENERGY_INTERVAL = 30;  // how often energy autoIncreases
 const ENERGY_INCREMENT = 1;  // the amount energy autoIncreases
 
 /* --------------------------------------------------------------
@@ -222,6 +222,7 @@ function preload() {
     game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
     game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
     game.load.atlas('wood_tiles', 'assets/sprites/wood_tiles.png', 'assets/sprites/wood_tiles.json');
+    game.load.atlas('wood_game_cards', 'assets/sprites/wood_game_cards.png', 'assets/sprites/wood_game_cards.json');
     game.load.atlas('stone_textures', 'assets/sprites/stone_textures.png', 'assets/sprites/stone_textures.json');
     
     // -- load audio -- //
@@ -242,9 +243,9 @@ function create() {
     
     // -- set up game -- //
     energy = new Resource('Energy', ENERGY_MAX, ENERGY_MAX);
-    wood = new Resource('Wood', 100);
-    metal = new Resource('Metal', 100);
-    stone = new Resource('Stone', 100);
+    wood = new Resource('Wood', 50);
+    metal = new Resource('Metal', 50);
+    stone = new Resource('Stone', 50);
     gold = new Resource('Gold', 100);
     
     createMainGame();
@@ -261,9 +262,10 @@ function update() {
             // any woodGame -specific update code goes here
             if (termites.active == true) {
             	if (nematodes.active == true) {
-            		console.log("Ye have nematodes living in ye wood so thy termites cannot thrive.")
+                    displayNotification("Ye have nematodes living in ye wood so thy termites cannot thrive.", 7000);
+                    termites.active = false;
             	} else {
-            		console.log("Ye wood stores be infested with termites! Seek thy nematodes to ruin them.")
+                    displayNotification("Ye wood stores be infested with termites! Seek thy nematodes to ruin them.");
                     if (game.time.now >= termitesTimer) {
                         termitesTimer = game.time.now + termites.interval;
                         wood.decrease(termites.trouble);
@@ -273,9 +275,10 @@ function update() {
             }
             if (fire.active == true) {
             	if (water.active == true) {
-            		console.log("Ye wood be wet so fire cannot be living here.")
+            		displayNotification("Ye wood be wet so fire cannot be living here.", 7000);
+                    fire.active = false;
             	} else {
-            		console.log("Thy wood be ablaze! Seek thee water to purge this calamity!")
+            		displayNotification("Thy wood be ablaze! Seek thee water to purge this calamity!");
                     if (game.time.now >= fireTimer) {
                         fireTimer = game.time.now + fire.interval;
                         wood.decrease(fire.trouble);
@@ -397,66 +400,66 @@ function createMainGame() {
     
     // -- create energy bar -- //
     energyMeter = game.make.text(
-        //game.world.width * 0.04,
-    	game.world.width * 0.05,
-        //game.world.height * 0.89,
-        game.world.height * 0.96,
+    	game.world.width * 0.01,
+        game.world.height,
         "",
-        {fontSize: '20px', fill: '#fff', align: 'center'}
+        {fontSize: '24px', fill: '#fff', align: 'center'}
     );
     energyMeter.type = Phaser.TEXT;
+    energyMeter.anchor.set(0, 0.9);
+    energyMeter.setShadow(2, 2, '#000', 2);
     mainGame.add(energyMeter);
     updateResourceMeter(energy);
     
     // -- create wood bar -- //
     woodMeter = game.make.text(
-        //game.world.width * 0.86,
-    	game.world.width * 0.25,
-        //game.world.height * 0.83,
-        game.world.height * 0.96,
+    	game.world.width * 0.35,
+        game.world.height,
         "",
-        {fontSize: '20px', fill: '#fff', align: 'center'}
+        {fontSize: '16px', fill: '#fff', align: 'center'}
     );
     woodMeter.type = Phaser.TEXT;
+    woodMeter.anchor.set(1, 0.7);
+    woodMeter.setShadow(2, 2, '#000', 2);
     mainGame.add(woodMeter);
     updateResourceMeter(wood);
     
     // -- create metal bar -- //
     metalMeter = game.make.text(
-        //game.world.width * 0.86,
-    	game.world.width * 0.45,
-        //game.world.height * 0.87,
-        game.world.height * 0.96,
+    	game.world.width * 0.5,
+        game.world.height,
         "",
-        {fontSize: '20px', fill: '#fff', align: 'center'}
+        {fontSize: '16px', fill: '#fff', align: 'center'}
     );
     metalMeter.type = Phaser.TEXT;
+    metalMeter.anchor.set(0.5, 0.7);
+    metalMeter.setShadow(2, 2, '#000', 2);
     mainGame.add(metalMeter);
     updateResourceMeter(metal);
     
     // -- create stone bar -- //
     stoneMeter = game.make.text(
-        //game.world.width * 0.86,
-    	game.world.width * 0.65,
-        //game.world.height * 0.91,
-        game.world.height * 0.96,
+    	game.world.width * 0.70,
+        game.world.height,
         "",
-        {fontSize: '20px', fill: '#fff', align: 'center'}
+        {fontSize: '16px', fill: '#fff', align: 'center'}
     );
     stoneMeter.type = Phaser.TEXT;
+    stoneMeter.anchor.set(0.5, 0.7);
+    stoneMeter.setShadow(2, 2, '#000', 2);
     mainGame.add(stoneMeter);
     updateResourceMeter(stone);
     
     // -- create gold bar -- //
     goldMeter = game.make.text(
-        //game.world.width * 0.86,
-    	game.world.width * 0.85,
-        //game.world.height * 0.95,
-        game.world.height * 0.96,
+    	game.world.width * 0.99,
+        game.world.height,
         "",
-        {fontSize: '20px', fill: '#fff', align: 'center'}
+        {fontSize: '24px', fill: '#fff', align: 'center'}
     );
     goldMeter.type = Phaser.TEXT;
+    goldMeter.anchor.set(1, 0.9);
+    goldMeter.setShadow(2, 2, '#000', 2);
     mainGame.add(goldMeter);
     updateResourceMeter(gold);
     
@@ -625,6 +628,8 @@ var nematodes = new Calamity('Nematodes', 0, 0, false);
 var fireTimer = 0,
     termitesTimer = 0;
 
+var notification;
+
 
 
 function startWoodGame() {
@@ -635,13 +640,16 @@ function startWoodGame() {
     // -- Mini-Game Declarations -- //
     const ROW_COUNT = 4,
           COLUMN_COUNT = 5,
-          MATCH_COUNT = 2;  // # of like cards needed to consider match
+          MATCH_COUNT = 2,  // # of like cards needed to consider match
+          TOTAL_NUM_CARDS = ROW_COUNT * COLUMN_COUNT,
+          TOTAL_NUM_MATCHES = TOTAL_NUM_CARDS / MATCH_COUNT;
     
-    const DISPLAY_DURATION = 1000;  // time to show cards before flip
-
+    var numberOfCardsShowing = 0,
+        numberOfMatchesLeft = TOTAL_NUM_MATCHES;
+    
     var selected;
     
-    var numberOfCardsShowing = 0;
+    const DISPLAY_DURATION = 1000;  // time to show cards before flip
     
     function getType(index) {
       switch (index) {
@@ -678,7 +686,6 @@ function startWoodGame() {
     );
     frame.anchor.set(0.5);
     frame.tileScale.set(0.25);
-    
     woodGame.add(frame);
     
     var table = game.make.tileSprite(
@@ -688,17 +695,15 @@ function startWoodGame() {
     );
     table.anchor.set(0.5);
     table.tileScale.set(0.5);
-    
     woodGame.add(table);
     
     
     // -- Create Random Cards List -- //
     var cardStartList = new Array(),
-        cardMatchList = new Array(),
-        TOTAL_NUM_CARDS = COLUMN_COUNT * ROW_COUNT;
+        cardMatchList = new Array();
     
     for (var cardSet = 1; cardSet <= MATCH_COUNT; cardSet++) {
-        for (var cardMatch = 0; cardMatch < TOTAL_NUM_CARDS / MATCH_COUNT; cardMatch++) {
+        for (var cardMatch = 0; cardMatch < TOTAL_NUM_MATCHES; cardMatch++) {
             cardStartList.push(cardMatch);
         }
     }
@@ -737,7 +742,7 @@ function startWoodGame() {
             var face = game.make.sprite(
                 Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
                 Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
-                'wood_tiles', 'wood_tile_01.png'
+                'wood_game_cards', getType(cardMatchList[cardIndex]) + ".png"
             );
             face.width = 0;
             face.height = (gridHeight / ROW_COUNT) - ROW_COUNT;
@@ -761,6 +766,7 @@ function startWoodGame() {
                 getType(cardMatchList[cardIndex++])
             );
             name.anchor.set(0.5);
+            name.visible = false;
             
             card.add(index);
             card.add(face);
@@ -771,8 +777,7 @@ function startWoodGame() {
     }
     woodGame.add(cards);
     
-    
-    // pull the width of the first card's back
+    // set normal card width to that of the first card's back
     const CARD_WIDTH = cards.children[0].children[2].width;
     
     
@@ -801,18 +806,16 @@ function startWoodGame() {
                 if (name == selected_name) {
                 	if (name == 'termites') {
                 		termites.active = true;
-                	}
-                	if (name == 'nematodes') {
+                	} else if (name == 'nematodes') {
                 		nematodes.active = true;
-                	}
-                	if (name == 'fire') {
+                	} else if (name == 'fire') {
                 		fire.active = true;
-                	}
-                	if (name == 'water') {
+                	} else if (name == 'water') {
                 		water.active = true;
-                	}
-                	
-                	
+                	} else {
+                        wood.increase(randomNumber(5, 20));
+                        updateResourceMeter(wood);
+                    }
                 	
                     // remove matching cards
                     game.time.events.add(DISPLAY_DURATION * 0.6, function() {
@@ -823,6 +826,17 @@ function startWoodGame() {
                             face.kill();
                             selected_face.kill();
                             numberOfCardsShowing = 0;
+                            if (numberOfMatchesLeft > 1) {
+                                numberOfMatchesLeft -= 1;
+                            } else {
+                                notification.position.y = game.world.centerY;
+                                notification.fontSize = '96px';
+                                displayNotification("Good game!", 4000);
+                                game.make.tween(woodGame).to({alpha: 0.334}, 2000, Phaser.Easing.Default, true, 2000, 0, false);
+                                waitFor(4000, function() {
+                                    exitWoodGame();
+                                });
+                            }
                         })
                     }, this);
                 } else {
@@ -845,14 +859,39 @@ function startWoodGame() {
         function animateMatch(card, duration) {
             game.make.tween(card).to({width: 0, height: 0}, duration, Phaser.Easing.Default, true, 0, 0, false);
         }
-        
-        function waitFor(duration, callback) {
-            game.time.events.add(duration, callback);
-        }
     }
+    
+    notification = game.make.text(
+    	game.world.centerX,
+        game.world.height * 0.01,
+        "",
+        {fontSize: '18px', fill: '#ff7510', align: 'center'}
+    );
+    notification.anchor.set(0.5, 0);
+    notification.setShadow(2, 2, '#000', 2);
+    notification.visible = false;
+    woodGame.add(notification);
 }
 
 
+function waitFor(duration, callback) {
+    game.time.events.add(duration, callback);
+}
+
+
+function displayNotification(message, duration) {
+    notification.text = message;
+    notification.visible = true;
+    
+    if (duration != null) {
+        waitFor(duration, function() {
+            notification.text = "";
+            notification.visible = false;
+        });
+    }
+}
+
+        
 function exitWoodGame() {
     game.world.remove(woodGame);
     mainGameSetFocus();
