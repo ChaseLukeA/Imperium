@@ -1,0 +1,28 @@
+{"frames": [
+
+{
+	"filename": "beetle_01.png",
+	"frame": {"x":1,"y":1,"w":322,"h":380},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":19,"y":0,"w":322,"h":380},
+	"sourceSize": {"w":350,"h":380}
+},
+{
+	"filename": "beetle_02.png",
+	"frame": {"x":325,"y":1,"w":302,"h":380},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":0,"w":302,"h":380},
+	"sourceSize": {"w":350,"h":380}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "beetle.png",
+	"format": "RGBA8888",
+	"size": {"w":628,"h":382},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6b155658a4a2f47557f0e18cb5719299:75aa27f7d1be10100ebfdd58b26da980:315b07c1d7e75371ade2e8e1b35573b3$"
+}
+}

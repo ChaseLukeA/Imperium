@@ -184,6 +184,28 @@ function randomPercentage(min, max) {
     return randomNumber(min, max) / 100;
 }
 
+// generate a random direction for use in the x, y coordinate system;
+// returns either 1 or -1, to be used in calculation of heading in a
+// positive axis direction or a negative axis direction;
+// usage examples: object.position.x = 3 * randomDirection()  >>
+// sets object.position.x to 3 or -3 with a 50% chance of either
+function randomDirection() {
+    return randomNumber(0, 1) == 0 ? -1 : 1;
+}
+
+// generate a random frequency to be used in the update() function;
+// frequency takes in a whole number percentage (example: 35) and then
+// returns true that percentage of the time;
+// examples: frequency(50)  >>  returns true 50% of the time
+//           frequency(4)  >>  returns true 4% of the time
+function frequency(percentage) {
+    if (randomNumber(1, (100 / percentage)) == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // return a fractional percentage from an input percentage from 1 to 100
 function p(number) {
     return number / 100;
@@ -223,6 +245,7 @@ function preload() {
     game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
     game.load.atlas('wood_tiles', 'assets/sprites/wood_tiles.png', 'assets/sprites/wood_tiles.json');
     game.load.atlas('wood_game_cards', 'assets/sprites/wood_game_cards.png', 'assets/sprites/wood_game_cards.json');
+    game.load.atlas('beetle', 'assets/sprites/beetle.png', 'assets/sprites/beetle.json');
     game.load.atlas('stone_textures', 'assets/sprites/stone_textures.png', 'assets/sprites/stone_textures.json');
     
     // -- load audio -- //
@@ -247,6 +270,8 @@ function create() {
     metal = new Resource('Metal', 50);
     stone = new Resource('Stone', 50);
     gold = new Resource('Gold', 100);
+    
+    game.physics.startSystem(Phaser.Physics.ARCADE);
     
     createMainGame();
     activeGame = Game.MAIN;
@@ -286,6 +311,16 @@ function update() {
                     }
             	}
             }
+            
+            beetles.forEach(function(beetle) {
+                if (beetle.visible == true) {
+                    if (frequency(2)) {
+                        beetle.angle += randomNumber(1, 2) * randomDirection();
+                    }
+                }
+            });
+            
+            
             
             
             break;
@@ -642,6 +677,8 @@ var nematodes = new Calamity('Nematodes', 0, 0, false);
 var fireTimer = 0,
     termitesTimer = 0;
 
+var beetles;
+
 var notification;
 
 
@@ -649,7 +686,7 @@ var notification;
 function startWoodGame() {
     
     activeGame = Game.WOOD;
-    woodGame = game.add.group();
+    woodGame = game.make.group();
     
     // -- Mini-Game Declarations -- //
     const ROW_COUNT = 4,
@@ -731,8 +768,9 @@ function startWoodGame() {
     }
     
 
-    // -- Build Cards From Random Cards List -- //
-    var cards = game.add.group();
+    // -- Build Beetles and Cards From Random Cards List -- //
+    beetles = game.make.group();
+    var cards = game.make.group();
     var cardIndex = 0;
     
     for (var column = 1; column <= COLUMN_COUNT; column++)
@@ -746,6 +784,23 @@ function startWoodGame() {
             var cardWidth = Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
                 cardHeight = Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT;
             
+            // make golden beetle
+            var beetle = game.make.sprite(
+                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
+                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                'beetle', 'beetle_01.png' 
+            );
+            beetle.width = gridWidth / COLUMN_COUNT / 3;
+            beetle.height = gridHeight / ROW_COUNT / 3;
+            beetle.anchor.set(0.5);
+            beetle.name = cardIndex;  // what index in beetles this will be
+            beetle.animations.add('crawl', [0, 1], 3, true);
+            beetle.visible = false;
+            
+            beetles.add(beetle);
+            
+            
+            // make card
             var card = game.make.group();
             
             // used for the actual index this will be added to
@@ -754,8 +809,7 @@ function startWoodGame() {
             index.visible = false;
             
             var face = game.make.sprite(
-                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
-                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                beetle.position.x, beetle.position.y,
                 'wood_game_cards', getType(cardMatchList[cardIndex]) + ".png"
             );
             face.width = 0;
@@ -763,8 +817,7 @@ function startWoodGame() {
             face.anchor.set(0.5);
     
             var back = game.make.sprite(
-                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
-                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                beetle.position.x, beetle.position.y,
                 'wood_tiles', 'wood_tile_03.png'
             );
             back.width = (gridWidth / COLUMN_COUNT) - COLUMN_COUNT;
@@ -775,8 +828,7 @@ function startWoodGame() {
     
             // using to verify the card matches
             var name = game.make.text(
-                Math.floor(gridWidth * gridPercentageY) - Math.pow(ROW_COUNT, 2) + ROW_COUNT,
-                Math.floor(gridHeight * gridPercentageX) - Math.pow(COLUMN_COUNT, 2) + ROW_COUNT,
+                beetle.position.x, beetle.position.y,
                 getType(cardMatchList[cardIndex++])
             );
             name.anchor.set(0.5);
@@ -789,6 +841,7 @@ function startWoodGame() {
             cards.add(card);
         }
     }
+    woodGame.add(beetles);
     woodGame.add(cards);
     
     // set normal card width to that of the first card's back
@@ -835,14 +888,17 @@ function startWoodGame() {
                     game.time.events.add(DISPLAY_DURATION * 0.6, function() {
                         animateMatch(face, DISPLAY_DURATION * 0.4);
                         animateMatch(selected_face, DISPLAY_DURATION * 0.4);
+                        wakeBeetle(index);
+                        wakeBeetle(selected_index);
 
                         game.time.events.add(DISPLAY_DURATION, function() {
                             face.kill();
                             selected_face.kill();
+                            
                             numberOfCardsShowing = 0;
-                            if (numberOfMatchesLeft > 1) {
-                                numberOfMatchesLeft -= 1;
-                            } else {
+                            numberOfMatchesLeft--;
+                            
+                            if (numberOfMatchesLeft == 0) {
                                 notification.position.y = game.world.centerY;
                                 notification.fontSize = '96px';
                                 displayNotification("Good game!", 4000);
@@ -903,6 +959,49 @@ function displayNotification(message, duration) {
             notification.visible = false;
         });
     }
+}
+
+
+function wakeBeetle(index) {
+    var beetle = beetles.children[index];
+    beetle.position.x += randomNumber(1, beetle.width) * randomDirection();
+    beetle.visible = true;
+    
+    game.physics.arcade.enable(beetle);
+    
+    beetle.animations.play('crawl');
+    
+    if (beetle.position.x < game.world.centerX) {
+        beetle.body.gravity.x = randomNumber(1, 3);
+    } else {
+        beetle.body.gravity.x = randomNumber(1, 3) * -1;
+    }
+    
+    if (beetle.position.y < game.world.centerY) {
+        beetle.body.gravity.y = randomNumber(1, 3);
+    } else {
+        beetle.body.gravity.y = randomNumber(1, 3) * -1;
+    }
+    
+    beetle.angle = (Math.atan2(0 - beetle.body.gravity.y, 0 - beetle.body.gravity.x) * 180 / Math.PI) - 90;
+    
+    beetle.inputEnabled = true;
+    beetle.events.onInputDown.add(squishEmBeetle, beetle);
+    
+    beetle.checkWorldBounds = true;
+    beetle.events.onOutOfBounds.add(beetleGotAway, beetle);
+}
+
+
+function squishEmBeetle(beetle) {
+    gold.increase(1);
+    updateResourceMeter(gold);
+    beetle.kill();
+}
+
+
+function beetleGotAway(beetle) {
+    beetle.kill();
 }
 
         
