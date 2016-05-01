@@ -669,10 +669,10 @@ and then add it to your mini-game with '<mini>Game.add(<varName>)'
 *  Wood Game Declarations and Functions                     [woodGame]  *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-var fire = new Calamity('Fire', 1, 1000, false);
-var water = new Calamity('Water', 0, 0, false);
-var termites = new Calamity('Termites', 1, 2000, false);
-var nematodes = new Calamity('Nematodes', 0, 0, false);
+var fire,
+    water,
+    termites,
+    nematodes;
 
 var fireTimer = 0,
     termitesTimer = 0;
@@ -680,7 +680,6 @@ var fireTimer = 0,
 var beetles;
 
 var notification;
-
 
 
 function startWoodGame() {
@@ -727,6 +726,10 @@ function startWoodGame() {
       }
     };
     
+    fire = new Calamity('Fire', 1, 1000, false);
+    water = new Calamity('Water', 0, 0, false);
+    termites = new Calamity('Termites', 1, 2000, false);
+    nematodes = new Calamity('Nematodes', 0, 0, false);
     
     
     // -- Build Game Board -- //
