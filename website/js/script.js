@@ -75,7 +75,8 @@ var Resource = function (_name, _amount, _max) {
             this.amount -= value;
             this.delta = Delta.Decreased;
         } else {
-            alert("Error! " + this.name + " cannot go below zero!");
+            //alert("Error! " + this.name + " cannot go below zero!");
+            this.amount = 0;
             this.delta = Delta.NoChange;
         }
     };
@@ -218,6 +219,15 @@ function paddedNumber(number) {
     return number < 10 ? "0" + number : number;
 }
 
+// pass in a duration to wait and then a callback function to call once
+// the wait time has passed;
+// example:  waitFor(5000, function() {
+//               someObject.doTheSomethingAfter5Seconds();
+//           });
+function waitFor(duration, callback) {
+    game.time.events.add(duration, callback);
+}
+
 
 
 
@@ -285,32 +295,48 @@ function update() {
             break;
         case Game.WOOD:
             // any woodGame -specific update code goes here
-            if (termites.active == true) {
-            	if (nematodes.active == true) {
-                    displayNotification("Ye have nematodes living in ye wood so thy termites cannot thrive.", 7000);
-                    termites.active = false;
-            	} else {
-                    displayNotification("Ye wood stores be infested with termites! Seek thy nematodes to ruin them.");
-                    if (game.time.now >= termitesTimer) {
-                        termitesTimer = game.time.now + termites.interval;
-                        wood.decrease(termites.trouble);
-                        updateResourceMeter(wood);
-                    }
-            	}
-            }
-            if (fire.active == true) {
-            	if (water.active == true) {
-            		displayNotification("Ye wood be wet so fire cannot be living here.", 7000);
+            if (water.active == true) {
+                if (fire.active == true) {
+                    fireMessage = "Ye wood be wet so fire cannot be living here.";
+                    
                     fire.active = false;
-            	} else {
-            		displayNotification("Thy wood be ablaze! Seek thee water to purge this calamity!");
-                    if (game.time.now >= fireTimer) {
-                        fireTimer = game.time.now + fire.interval;
-                        wood.decrease(fire.trouble);
-                        updateResourceMeter(wood);
-                    }
-            	}
+                    
+                    waitFor(5000, function() {
+                        fireMessage = "";
+                    });
+                }
+            } else if (fire.active == true) {
+                fireMessage = "Thy wood be ablaze! Seek thee water to purge this calamity!";
+                pulseNotification();
+                
+                if (game.time.now >= fireTimer) {
+                    fireTimer = game.time.now + fire.interval;
+                    wood.decrease(fire.trouble);
+                    updateResourceMeter(wood);
+                }
             }
+            
+            if (nematodes.active == true) {
+                if (termites.active == true) {
+                    termitesMessage = "Ye have nematodes living in ye wood so thy termites cannot thrive.";
+                    termites.active = false;
+                    
+                    waitFor(5000, function() {
+                        termitesMessage = "";
+                    });
+                }
+            } else if (termites.active == true) {
+                termitesMessage = "Ye wood stores be infested with termites! Seek thy nematodes to ruin them.";
+                pulseNotification();
+                
+                if (game.time.now >= termitesTimer) {
+                    termitesTimer = game.time.now + termites.interval;
+                    wood.decrease(termites.trouble);
+                    updateResourceMeter(wood);
+                }
+            }
+
+            notification.text = fireMessage + (fireMessage != "" ? "\n" + termitesMessage : termitesMessage);
             
             beetles.forEach(function(beetle) {
                 if (beetle.visible == true) {
@@ -321,7 +347,24 @@ function update() {
             });
             
             
-            
+            function pulseNotification() {
+                if (game.time.now >= notificationPulseTimer) {
+                    var scalar = 0.005;
+                    var currentFill = notification.fill;
+
+                    notificationPulseTimer = game.time.now + NOTIFICATION_PULSE;
+
+                    game.make.tween(notification.scale).to({
+                        x: notification.scale.x + scalar,
+                        y: notification.scale.y + scalar
+                    }, NOTIFICATION_PULSE / 4, Phaser.Easing.Default, true, 0, 0, true);
+
+                    notification.fill = "#f00";
+                    waitFor(NOTIFICATION_PULSE / 4, function() {
+                        notification.fill = currentFill;
+                    });
+                }
+            }
             
             break;
         case Game.METAL:
@@ -669,17 +712,22 @@ and then add it to your mini-game with '<mini>Game.add(<varName>)'
 *  Wood Game Declarations and Functions                     [woodGame]  *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+var notification,
+    notificationPulseTimer;
+
+const NOTIFICATION_PULSE = 1000;
+
 var fire,
     water,
     termites,
     nematodes;
 
-var fireTimer = 0,
-    termitesTimer = 0;
+var fireTimer,
+    fireMessage,
+    termitesTimer,
+    termitesMessage;
 
 var beetles;
-
-var notification;
 
 
 function startWoodGame() {
@@ -726,10 +774,17 @@ function startWoodGame() {
       }
     };
     
+    notificationPulseTimer = 0;
+
     fire = new Calamity('Fire', 1, 1000, false);
     water = new Calamity('Water', 0, 0, false);
     termites = new Calamity('Termites', 1, 2000, false);
     nematodes = new Calamity('Nematodes', 0, 0, false);
+    
+    fireTimer = 0,
+    fireMessage = "",
+    termitesTimer = 0,
+    termitesMessage = "";
     
     
     // -- Build Game Board -- //
@@ -750,6 +805,14 @@ function startWoodGame() {
     table.anchor.set(0.5);
     table.tileScale.set(0.5);
     woodGame.add(table);
+    
+    notification = game.make.text(
+    	game.world.centerX, 0, "",
+        {fontSize: '17px', fill: '#ff7510', align: 'center'}
+    );
+    notification.lineSpacing = -6;
+    notification.anchor.set(0.5, 0);
+    notification.setShadow(2, 2, '#000', 2);
     
     
     // -- Create Random Cards List -- //
@@ -846,10 +909,11 @@ function startWoodGame() {
     }
     woodGame.add(beetles);
     woodGame.add(cards);
+    woodGame.add(notification);
+    
     
     // set normal card width to that of the first card's back
     const CARD_WIDTH = cards.children[0].children[2].width;
-    
     
     function checkCard() {
         if (numberOfCardsShowing < 2)
@@ -861,6 +925,13 @@ function startWoodGame() {
 
             animateFlip(back, face, 100, 0);
 
+            if (name == 'termites') {
+                termites.active = true;
+            }
+            if (name == 'fire') {
+                fire.active = true;
+            }
+                
             if (selected == null) {
                 numberOfCardsShowing++;
 
@@ -874,12 +945,8 @@ function startWoodGame() {
                     selected_name = selected.children[3].text;
 
                 if (name == selected_name) {
-                	if (name == 'termites') {
-                		termites.active = true;
-                	} else if (name == 'nematodes') {
+                	if (name == 'nematodes') {
                 		nematodes.active = true;
-                	} else if (name == 'fire') {
-                		fire.active = true;
                 	} else if (name == 'water') {
                 		water.active = true;
                 	} else {
@@ -902,9 +969,15 @@ function startWoodGame() {
                             numberOfMatchesLeft--;
                             
                             if (numberOfMatchesLeft == 0) {
-                                notification.position.y = game.world.centerY;
-                                notification.fontSize = '96px';
-                                displayNotification("Good game!", 4000);
+                                var gameOver = game.make.text(
+                                    game.world.centerX, game.world.centerY,
+                                    "A fine game!",
+                                    {fontSize: '96px', fill: '#ff7510', align: 'center'}
+                                );
+                                gameOver.anchor.set(0.5);
+                                gameOver.setShadow(2, 2, '#000', 2);
+                                woodGame.add(gameOver);
+                                
                                 game.make.tween(woodGame).to({alpha: 0.334}, 2000, Phaser.Easing.Default, true, 2000, 0, false);
                                 waitFor(4000, function() {
                                     exitWoodGame();
@@ -934,81 +1007,56 @@ function startWoodGame() {
         }
     }
     
-    notification = game.make.text(
-    	game.world.centerX,
-        game.world.height * 0.01,
-        "",
-        {fontSize: '18px', fill: '#ff7510', align: 'center'}
-    );
-    notification.anchor.set(0.5, 0);
-    notification.setShadow(2, 2, '#000', 2);
-    notification.visible = false;
-    woodGame.add(notification);
-}
-
-
-function waitFor(duration, callback) {
-    game.time.events.add(duration, callback);
-}
-
-
-function displayNotification(message, duration) {
-    notification.text = message;
-    notification.visible = true;
     
-    if (duration != null) {
-        waitFor(duration, function() {
-            notification.text = "";
-            notification.visible = false;
-        });
+    function wakeBeetle(index) {
+        var beetle = beetles.children[index];
+        beetle.position.x += randomNumber(1, beetle.width) * randomDirection();
+        beetle.visible = true;
+
+        game.physics.arcade.enable(beetle);
+
+        beetle.animations.play('crawl');
+
+        if (beetle.position.x < game.world.centerX) {
+            beetle.body.gravity.x = randomNumber(1, 3);
+        } else {
+            beetle.body.gravity.x = randomNumber(1, 3) * -1;
+        }
+
+        if (beetle.position.y < game.world.centerY) {
+            beetle.body.gravity.y = randomNumber(1, 3);
+        } else {
+            beetle.body.gravity.y = randomNumber(1, 3) * -1;
+        }
+
+        beetle.angle = (Math.atan2(0 - beetle.body.gravity.y, 0 - beetle.body.gravity.x) * 180 / Math.PI) - 90;
+
+        beetle.inputEnabled = true;
+        beetle.events.onInputDown.add(squishEmBeetle, beetle);
+
+        beetle.checkWorldBounds = true;
+        beetle.events.onOutOfBounds.add(beetleGotAway, beetle);
     }
-}
 
 
-function wakeBeetle(index) {
-    var beetle = beetles.children[index];
-    beetle.position.x += randomNumber(1, beetle.width) * randomDirection();
-    beetle.visible = true;
-    
-    game.physics.arcade.enable(beetle);
-    
-    beetle.animations.play('crawl');
-    
-    if (beetle.position.x < game.world.centerX) {
-        beetle.body.gravity.x = randomNumber(1, 3);
-    } else {
-        beetle.body.gravity.x = randomNumber(1, 3) * -1;
+    function squishEmBeetle(beetle) {
+        gold.increase(1);
+        updateResourceMeter(gold);
+        beetle.kill();
     }
-    
-    if (beetle.position.y < game.world.centerY) {
-        beetle.body.gravity.y = randomNumber(1, 3);
-    } else {
-        beetle.body.gravity.y = randomNumber(1, 3) * -1;
+
+
+    function beetleGotAway(beetle) {
+        beetle.kill();
     }
-    
-    beetle.angle = (Math.atan2(0 - beetle.body.gravity.y, 0 - beetle.body.gravity.x) * 180 / Math.PI) - 90;
-    
-    beetle.inputEnabled = true;
-    beetle.events.onInputDown.add(squishEmBeetle, beetle);
-    
-    beetle.checkWorldBounds = true;
-    beetle.events.onOutOfBounds.add(beetleGotAway, beetle);
-}
-
-
-function squishEmBeetle(beetle) {
-    gold.increase(1);
-    updateResourceMeter(gold);
-    beetle.kill();
-}
-
-
-function beetleGotAway(beetle) {
-    beetle.kill();
 }
 
         
 function exitWoodGame() {
+    // reset globally-declared variables
+    beetles = null;
+    notification = null;
+
     game.world.remove(woodGame);
     mainGameSetFocus();
 }
