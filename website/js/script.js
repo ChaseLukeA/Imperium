@@ -295,8 +295,8 @@ function update() {
             break;
         case Game.WOOD:
             // any woodGame -specific update code goes here
-            if (water.active == true) {
-                if (fire.active == true) {
+            if (water.active) {
+                if (fire.active) {
                     fireMessage = "Ye wood be wet so fire cannot be living here.";
                     
                     fire.active = false;
@@ -305,7 +305,7 @@ function update() {
                         fireMessage = "";
                     });
                 }
-            } else if (fire.active == true) {
+            } else if (fire.active) {
                 fireMessage = "Thy wood be ablaze! Seek thee water to purge this calamity!";
                 pulseNotification();
                 
@@ -316,8 +316,8 @@ function update() {
                 }
             }
             
-            if (nematodes.active == true) {
-                if (termites.active == true) {
+            if (nematodes.active) {
+                if (termites.active) {
                     termitesMessage = "Ye have nematodes living in ye wood so thy termites cannot thrive.";
                     termites.active = false;
                     
@@ -325,7 +325,7 @@ function update() {
                         termitesMessage = "";
                     });
                 }
-            } else if (termites.active == true) {
+            } else if (termites.active) {
                 termitesMessage = "Ye wood stores be infested with termites! Seek thy nematodes to ruin them.";
                 pulseNotification();
                 
