@@ -250,6 +250,7 @@ function preload() {
     game.load.atlas('earth', 'assets/sprites/earth.png', 'assets/sprites/earth.json');
     game.load.atlas('grass', 'assets/sprites/grass.png', 'assets/sprites/grass.json');
     game.load.atlas('sun', 'assets/sprites/sun.png', 'assets/sprites/sun.json');
+    game.load.atlas('castle', 'assets/sprites/castle.png', 'assets/sprites/castle.json');
     game.load.atlas('trees_flower', 'assets/sprites/trees_flower.png', 'assets/sprites/trees_flower.json');
     game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
     game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
@@ -388,31 +389,27 @@ function update() {
 *  Main Game Functions                                      [mainGame]  *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function createMainGame() {
-    var ground,
-        grass,
-        clouds;
     
     var button_playWoodGame,
         button_playMetalGame,
         button_playStoneGame;
     
+    var ground,
+        clouds,
+        grass;
+    
+    var main_center,
+        main_wall_left,
+        main_turret_left,
+        main_wall_right,
+        main_turret_right,
+        second_center,
+        second_turret_left,
+        second_turret_right,
+        third_wall_center,
+        fourth_turret_center;
+    
     mainGame = game.add.group();
-    
-    // -- create ground -- //
-    ground = game.make.tileSprite(
-        0, game.height, game.width, game.height * 0.20, 'earth', 'earth_03.png'
-    );
-    ground.anchor.set(0, 1);
-    ground.tileScale.set(0.33);
-    mainGame.add(ground);
-    
-    // -- create grass -- //
-    grass = game.make.sprite(
-        0, game.height - game.height * 0.18, 'grass', 'grass_02.png'
-    );
-    grass.anchor.set(0, 1);
-    grass.scale.set(game.width / grass.width);
-    mainGame.add(grass);
     
     // -- create random clouds -- //
     var numberOfClouds = randomNumber(3, 6);
@@ -433,6 +430,65 @@ function createMainGame() {
         cloud.alpha = (randomPercentage(80, 100));
     }
     mainGame.add(clouds);
+    
+    // -- create ground -- //
+    ground = game.make.tileSprite(
+        0, game.height, game.width, game.height * 0.20, 'earth', 'earth_03.png'
+    );
+    ground.anchor.set(0, 1);
+    ground.tileScale.set(0.33);
+    mainGame.add(ground);
+    
+    // -- create background grass -- //
+    grass = game.make.sprite(
+        0, game.height * 0.82, 'grass', 'grass_02.png'
+    );
+    grass.anchor.set(0, 1);
+    grass.scale.set(game.width / grass.width, 0.2);
+    mainGame.add(grass);
+    
+    // -- create castle -- //
+    main_center = game.make.sprite(
+        game.world.centerX, game.height * 0.83,
+        'castle', 'main_center.png'
+    );
+    main_center.anchor.set(0.5, 1);
+    main_center.scale.set(0.25);
+    mainGame.add(main_center);
+    
+    main_wall_left = game.make.sprite(
+        game.world.width * 0.5, game.height * 0.83,
+        'castle', 'main_wall_left.png'
+    );
+    main_wall_left.anchor.set(0.5, 1);
+    main_wall_left.scale.set(0.25);
+    mainGame.add(main_wall_left);
+    
+    main_turret_left = game.make.sprite(
+        game.world.width * 0.5, game.height * 0.83,
+        'castle', 'main_turret_left.png'
+    );
+    main_turret_left.anchor.set(0.5, 1);
+    main_turret_left.scale.set(0.25);
+    mainGame.add(main_turret_left);
+    
+    main_wall_right = game.make.sprite(
+        game.world.width * 0.5, game.height * 0.83,
+        'castle', 'main_wall_right.png'
+    );
+    main_wall_right.anchor.set(0.5, 1);
+    main_wall_right.scale.set(0.25);
+    mainGame.add(main_wall_right);
+    
+    main_turret_right = game.make.sprite(
+        game.world.width * 0.5, game.height * 0.83,
+        'castle', 'main_turret_right.png'
+    );
+    main_turret_right.anchor.set(0.5, 1);
+    main_turret_right.scale.set(0.25);
+    mainGame.add(main_turret_right);
+    
+    
     
     // -- create mini-game buttons -- //
     button_playWoodGame = game.make.button(
