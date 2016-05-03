@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "fourth_turret_center.png",
+	"frame": {"x":1,"y":714,"w":402,"h":801},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":809,"y":0,"w":402,"h":801},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "main_center.png",
+	"frame": {"x":1,"y":1,"w":862,"h":711},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":599,"y":1039,"w":862,"h":711},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "main_turret_left.png",
+	"frame": {"x":1209,"y":1,"w":261,"h":711},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1039,"w":261,"h":711},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "main_turret_right.png",
+	"frame": {"x":749,"y":785,"w":261,"h":711},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1789,"y":1039,"w":261,"h":711},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "main_wall_left.png",
+	"frame": {"x":1012,"y":1139,"w":412,"h":382},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":229,"y":1339,"w":412,"h":382},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "main_wall_right.png",
+	"frame": {"x":405,"y":1508,"w":412,"h":382},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1409,"y":1339,"w":412,"h":382},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "second_center.png",
+	"frame": {"x":819,"y":1523,"w":532,"h":312},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":759,"y":1089,"w":532,"h":312},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "second_turret_left.png",
+	"frame": {"x":405,"y":714,"w":342,"h":792},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":369,"y":609,"w":342,"h":792},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "second_turret_right.png",
+	"frame": {"x":865,"y":1,"w":342,"h":782},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1339,"y":619,"w":342,"h":782},
+	"sourceSize": {"w":2050,"h":1750}
+},
+{
+	"filename": "third_wall_center.png",
+	"frame": {"x":1012,"y":785,"w":472,"h":352},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":779,"y":739,"w":472,"h":352},
+	"sourceSize": {"w":2050,"h":1750}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "castle.png",
+	"format": "RGBA8888",
+	"size": {"w":1485,"h":1891},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c4d059f592eb65866b0dd788ec4025fd:0202ef1f337095447d2d450b2071ccb7:f0f8b5fb6e7b5e45cd3852560b07dc12$"
+}
+}
