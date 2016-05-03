@@ -1,0 +1,36 @@
+{"frames": [
+
+{
+	"filename": "Brick_1.png",
+	"frame": {"x":1,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "Brick_2.png",
+	"frame": {"x":35,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "Brick_3.png",
+	"frame": {"x":69,"y":1,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "bricks.png",
+	"format": "RGBA8888",
+	"size": {"w":102,"h":34},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:942824903997c62f0491bf873b8cba3d:0090484b1f8eab253e023a62bde0bf90:1f1d922f5e3ed27cd1e72a3c7a962fe1$"
+}
+}
