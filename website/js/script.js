@@ -1100,6 +1100,182 @@ function startStoneGame() {
     activeGame = Game.STONE;
     stoneGame = game.add.group();
     
+    game.physics.arcade.checkCollision.down = false;
+    
+    var ball,
+        paddle,
+        bricks,
+        numberBrickRows = 3,
+        numberBrickColumns = 15,
+        ballIsOnPaddle = true,
+        lives = 3,
+        score = 0,
+        scoreText,
+        livesText,
+        introductionText,
+        cursors;
+    
+    bricks = game.add.group();
+    bricks.enableBody = true;
+    bricks.physicsBodyType = Phaser.Physics.ARCADE;
+    
+    var brick;
+    
+    for (var y = 0; y < numberBrickRows; y++) {
+        
+        for (var x = 0; x < numberBrickColumns; x++) {   
+            
+            brick = bricks.create(120 + (x * 36), 100 + (y * 52), 'bricks', 'Brick_' + (y + 1) + '.png');
+            
+            brick.body.bounce.set(1);
+            brick.body.immovable = true;        
+        }
+        
+    }
+    
+    // - Set up paddle -
+    
+    paddle = game.add.sprite(game.world.centerX, game.height - 100, 'paddle_ball', 'paddle.png');
+    
+    paddle.anchor.setTo(0.5, 0.5);
+    
+    paddle.scale.set(0.5);
+    
+    game.physics.enable(paddle, Phaser.Physics.ARCADE);
+    
+    paddle.body.collideWorldBounds = true;
+    paddle.body.bounce.set(1);
+    paddle.body.immovable = true;
+    
+    // - Set up ball -
+    
+    ball = game.add.sprite(game.world.centerX, game.height - 130, 'paddle_ball', 'ball.png');
+    
+    ball.anchor.setTo(0.5, 0.5);
+    
+    ball.checkWorldBounds = true;
+    
+    game.physics.enable(ball, Phaser.Physics.ARCADE);
+    
+    ball.body.collideWorldBounds = true;
+    ball.body.bounce.set(1);
+    
+    ball.scale.set(0.5);
+    
+    ball.events.onOutOfBounds.add(ballWasLost, this);
+    
+    scoreText = game.add.text(32, 550, 'score: 0', {font: "15px Arial", fill: "#fff", align: "left"});
+    
+    livesText = game.add.text(500, 550, 'lives: 3', {font: "15px Arial", fill: "#fff", align: "left"});
+    
+    introductionText = game.add.text(300, 600, ' - click - ', {font: "15px Arial", fill: "#fff", align: "left"});
+    
+    introductionText.anchor.set(0.5);
+    
+    game.input.onDown.add(letGoOfBall, this);
+    
+    
+    
+    function letGoOfBall() {
+        
+        if (ballIsOnPaddle) {
+            ballIsOnPaddle = false;
+            
+            ball.body.velocity.y = -200;
+            ball.body.velocity.x = -50;
+            
+            introductionText.visible = false;
+        }
+        
+    }
+    
+    
+    
+    function ballWasLost() {
+        
+        // Drop number of lives by one and update them.
+        lives--;
+        
+        livesText.text = 'lives: ' + lives;
+        
+        if (lives === 0) {
+            
+            gameOver();
+            
+        } else {
+            
+            ballIsOnPaddle = true;
+            
+            ball.reset(paddle.body.x + 65, paddle.y - 28);
+            
+        }
+        
+    }
+    
+    function ballHitPaddle(_ball, _paddle) {
+    
+        var diff = 0;
+
+        if (_ball.x < _paddle.x) { 
+            
+            diff = _paddle.x - _ball.x;
+            
+            _ball.body.velocity.x = (-10 * diff);
+
+        } else if(_ball.x > _paddle.x) {
+
+            diff = _ball.x - _paddle.x;
+            _ball.body.velocity.x = (10 * diff);
+
+        } else {
+        
+            _ball.body.velocity.x = 2 + Math.random() * 8;
+           
+        }
+        
+    }
+
+    function ballHitBrick(_ball, _brick) {
+        _brick.kill();
+        
+        stone.increase(1);
+        score += 10;
+        scoreText.text = 'score: ' + score;
+        
+        
+        if (bricks.countLiving() == 0) {
+            
+            score += 1000;
+            scoreText.text = 'score: ' + score;
+            introText.text = '- Next Level -';
+            
+            
+            ballIsOnPaddle = true;
+            ball.body.velocity.set(0);
+            ball.x = paddle.x + 16;
+            ball.y = paddle.y - 12;
+            
+            
+            bricks.callAll('revive');
+            
+        }
+    
+    }
+    
+    
+    function gameOver() {
+        
+        ball.body.velocity.setTo(0, 0);
+        
+        paddle.kill();
+        livesText.kill();
+        scoreText.kill();
+        bricks.kill();
+        
+        exitStoneGame();
+        
+    }
+    
     
     
     // call exitStoneGame() when the game is over
