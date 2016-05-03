@@ -470,6 +470,8 @@ function createMainGame() {
     );
     main_center.anchor.set(0.5, 1);
     main_center.scale.set(0.25);
+    main_center.inputEnabled = true;
+    main_center.events.onInputDown.add(addCastlePiece, main_center);
     castle.add(main_center);
     
     main_wall_left = game.make.sprite(
@@ -478,6 +480,8 @@ function createMainGame() {
     );
     main_wall_left.anchor.set(0.5, 1);
     main_wall_left.scale.set(0.25);
+    main_wall_left.inputEnabled = true;
+    main_wall_left.events.onInputDown.add(addCastlePiece, main_wall_left);
     castle.add(main_wall_left);
     
     main_turret_left = game.make.sprite(
@@ -486,6 +490,8 @@ function createMainGame() {
     );
     main_turret_left.anchor.set(0.5, 1);
     main_turret_left.scale.set(0.25);
+    main_wall_right.inputEnabled = true;
+    main_wall_right.events.onInputDown.add(addCastlePiece, main_wall_right);
     castle.add(main_turret_left);
     
     main_wall_right = game.make.sprite(
@@ -494,6 +500,8 @@ function createMainGame() {
     );
     main_wall_right.anchor.set(0.5, 1);
     main_wall_right.scale.set(0.25);
+    main_wall_right.inputEnabled = true;
+    main_wall_right.events.onInputDown.add(addCastlePiece, main_wall_right);
     castle.add(main_wall_right);
     
     main_turret_right = game.make.sprite(
@@ -504,7 +512,45 @@ function createMainGame() {
     main_turret_right.scale.set(0.25);
     castle.add(main_turret_right);
     
+    second_center = game.make.sprite(
+        game.world.centerX, game.height * 0.83,
+        'castle', 'second_center.png'
+    );
+    second_center.anchor.set(0.5, 1);
+    second_center.scale.set(0.25);
+    castle.add(second_center);
     
+    second_turret_left = game.make.sprite(
+        game.world.width * 0.5, game.height * 0.83,
+        'castle', 'second_turret_left.png'
+    );
+    second_turret_left.anchor.set(0.5, 1);
+    second_turret_left.scale.set(0.25);
+    castle.add(second_turret_left);
+    
+    second_turret_right = game.make.sprite(
+        game.world.width * 0.5, game.height * 0.83,
+        'castle', 'second_turret_right.png'
+    );
+    second_turret_right.anchor.set(0.5, 1);
+    second_turret_right.scale.set(0.25);
+    castle.add(second_turret_right);
+    
+    third_wall_center = game.make.sprite(
+        game.world.centerX, game.height * 0.83,
+        'castle', 'third_wall_center.png'
+    );
+    third_wall_center.anchor.set(0.5, 1);
+    third_wall_center.scale.set(0.25);
+    castle.add(third_wall_center);
+    
+    fourth_turret_center = game.make.sprite(
+        game.world.centerX, game.height * 0.83,
+        'castle', 'fourth_turret_center.png'
+    );
+    fourth_turret_center.anchor.set(0.5, 1);
+    fourth_turret_center.scale.set(0.25);
+    castle.add(fourth_turret_center);
     
     mainGame.add(castle);
     
