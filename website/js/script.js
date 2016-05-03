@@ -251,6 +251,7 @@ function preload() {
     game.load.atlas('grass', 'assets/sprites/grass.png', 'assets/sprites/grass.json');
     game.load.atlas('sun', 'assets/sprites/sun.png', 'assets/sprites/sun.json');
     game.load.atlas('castle', 'assets/sprites/castle.png', 'assets/sprites/castle.json');
+    game.load.atlas('build', 'assets/sprites/build.png', 'assets/sprites/build.json');
     game.load.atlas('trees_flower', 'assets/sprites/trees_flower.png', 'assets/sprites/trees_flower.json');
     game.load.atlas('trees_thin', 'assets/sprites/trees_thin.png', 'assets/sprites/trees_thin.json');
     game.load.atlas('trees_full', 'assets/sprites/trees_full.png', 'assets/sprites/trees_full.json');
@@ -380,9 +381,9 @@ function update() {
     // any universal (all games) update code goes here
 }
 
-//function addCastlePiece() {
-//    alert("This is " + this);
-//}
+function addCastlePiece() {
+    alert("This is " + this);
+}
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
@@ -478,7 +479,7 @@ function createMainGame() {
     
     main_wall_left = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
-        'castle', 'main_wall_left.png'
+        'build', 'main_wall_left.png'
     );
     main_wall_left.anchor.set(0.5, 1);
     main_wall_left.scale.set(0.25);
@@ -488,7 +489,7 @@ function createMainGame() {
     
     main_turret_left = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
-        'castle', 'main_turret_left.png'
+        'build', 'main_turret_left.png'
     );
     main_turret_left.anchor.set(0.5, 1);
     main_turret_left.scale.set(0.25);
@@ -498,7 +499,7 @@ function createMainGame() {
     
     main_wall_right = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
-        'castle', 'main_wall_right.png'
+        'build', 'main_wall_right.png'
     );
     main_wall_right.anchor.set(0.5, 1);
     main_wall_right.scale.set(0.25);
@@ -508,7 +509,7 @@ function createMainGame() {
     
     main_turret_right = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
-        'castle', 'main_turret_right.png'
+        'build', 'main_turret_right.png'
     );
     main_turret_right.anchor.set(0.5, 1);
     main_turret_right.scale.set(0.25);
@@ -518,7 +519,7 @@ function createMainGame() {
     
     second_center = game.make.sprite(
         game.world.centerX, game.height * 0.83,
-        'castle', 'second_center.png'
+        'build', 'second_center.png'
     );
     second_center.anchor.set(0.5, 1);
     second_center.scale.set(0.25);
@@ -528,7 +529,7 @@ function createMainGame() {
     
     second_turret_left = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
-        'castle', 'second_turret_left.png'
+        'build', 'second_turret_left.png'
     );
     second_turret_left.anchor.set(0.5, 1);
     second_turret_left.scale.set(0.25);
@@ -538,7 +539,7 @@ function createMainGame() {
     
     second_turret_right = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
-        'castle', 'second_turret_right.png'
+        'build', 'second_turret_right.png'
     );
     second_turret_right.anchor.set(0.5, 1);
     second_turret_right.scale.set(0.25);
@@ -548,7 +549,7 @@ function createMainGame() {
     
     third_wall_center = game.make.sprite(
         game.world.centerX, game.height * 0.83,
-        'castle', 'third_wall_center.png'
+        'build', 'third_wall_center.png'
     );
     third_wall_center.anchor.set(0.5, 1);
     third_wall_center.scale.set(0.25);
@@ -558,7 +559,7 @@ function createMainGame() {
     
     fourth_turret_center = game.make.sprite(
         game.world.centerX, game.height * 0.83,
-        'castle', 'fourth_turret_center.png'
+        'build', 'fourth_turret_center.png'
     );
     fourth_turret_center.anchor.set(0.5, 1);
     fourth_turret_center.scale.set(0.25);
