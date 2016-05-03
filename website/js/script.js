@@ -257,7 +257,8 @@ function preload() {
     game.load.atlas('wood_game_cards', 'assets/sprites/wood_game_cards.png', 'assets/sprites/wood_game_cards.json');
     game.load.atlas('beetle', 'assets/sprites/beetle.png', 'assets/sprites/beetle.json');
     game.load.atlas('stone_textures', 'assets/sprites/stone_textures.png', 'assets/sprites/stone_textures.json');
-    
+    game.load.atlas('bricks', 'assets/sprites/bricks.png', 'assets/sprites/bricks.json');
+    game.load.atlas('paddle_ball', 'assets/sprites/paddle_ball.png', 'assets/sprites/paddle_ball.json');
     // -- load audio -- //
     // TODO: add audio clips
     
@@ -584,8 +585,8 @@ function playStoneGame() {
     if (energy.hasEnoughFor(GAME_COST)) {
         energy.decrease(GAME_COST);
         updateResourceMeter(energy);
-        //mainGameRemoveFocus();
-        //startStoneGame();
+        mainGameRemoveFocus();
+        startStoneGame();
         alert("Play stone game!");
     } else {
         alert("Not enough energy!");
@@ -1099,20 +1100,7 @@ function startStoneGame() {
     activeGame = Game.STONE;
     stoneGame = game.add.group();
     
-    // YOUR MINI-GAME CODE!!!
-    // ITS OK TO KEEP THE GAME BACKGROUND FROM
-    // THE WOODGAME EXAMPLE, ALL OTHER CODE AFTER
-    // THIS MUST BE YOUR ORIGINAL CODE
     
-    var tableRow = game.make.tileSprite(
-        game.world.centerX, game.world.centerY,
-        game.width * .84, game.height * .64,
-        'stone_textures', 'obj_stoneblock001.png'
-    );
-    
-    tableRow.anchor.set(0.5);
-    
-    stoneGame.add(tableRow);
     
     // call exitStoneGame() when the game is over
 }
