@@ -1174,9 +1174,28 @@ function startStoneGame() {
     
     game.input.onDown.add(letGoOfBall, this);
     
+    if (paddle.x < 24) {
+        paddle.x = 24; 
+        
+    } else if (paddle.x > game.width - 24) {
+        paddle.x = game.width - 24;
+        
+    }
     
+    
+    if  (ballIsOnPaddle) {
+        ball.body.x = paddle.x;
+    } else {
+        
+        game.physics.arcade.collide(ball, paddle, ballHitPaddle, null, this);
+        
+        game.physics.arcade.collide(ball, bricks, ballHitBrick, null, this);
+        
+    }
     
     function letGoOfBall() {
+        
+        paddle.x = game.input.x;
         
         if (ballIsOnPaddle) {
             ballIsOnPaddle = false;
