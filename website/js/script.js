@@ -398,7 +398,8 @@ function createMainGame() {
         clouds,
         grass;
     
-    var main_center,
+    var castle,
+        main_center,
         main_wall_left,
         main_turret_left,
         main_wall_right,
@@ -448,13 +449,15 @@ function createMainGame() {
     mainGame.add(grass);
     
     // -- create castle -- //
+    castle = game.make.group();
+    
     main_center = game.make.sprite(
         game.world.centerX, game.height * 0.83,
         'castle', 'main_center.png'
     );
     main_center.anchor.set(0.5, 1);
     main_center.scale.set(0.25);
-    mainGame.add(main_center);
+    castle.add(main_center);
     
     main_wall_left = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
@@ -462,7 +465,7 @@ function createMainGame() {
     );
     main_wall_left.anchor.set(0.5, 1);
     main_wall_left.scale.set(0.25);
-    mainGame.add(main_wall_left);
+    castle.add(main_wall_left);
     
     main_turret_left = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
@@ -470,7 +473,7 @@ function createMainGame() {
     );
     main_turret_left.anchor.set(0.5, 1);
     main_turret_left.scale.set(0.25);
-    mainGame.add(main_turret_left);
+    castle.add(main_turret_left);
     
     main_wall_right = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
@@ -478,7 +481,7 @@ function createMainGame() {
     );
     main_wall_right.anchor.set(0.5, 1);
     main_wall_right.scale.set(0.25);
-    mainGame.add(main_wall_right);
+    castle.add(main_wall_right);
     
     main_turret_right = game.make.sprite(
         game.world.width * 0.5, game.height * 0.83,
@@ -486,9 +489,11 @@ function createMainGame() {
     );
     main_turret_right.anchor.set(0.5, 1);
     main_turret_right.scale.set(0.25);
-    mainGame.add(main_turret_right);
+    castle.add(main_turret_right);
     
     
+    
+    mainGame.add(castle);
     
     // -- create mini-game buttons -- //
     button_playWoodGame = game.make.button(
