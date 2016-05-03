@@ -398,6 +398,19 @@ function createMainGame() {
         clouds,
         grass;
     
+    const Castle = {  // Castle enum for accessing piece in castle group
+        main_center: 0,  // Example:  castle.children[Castle.main_center]
+        main_wall_left: 1,
+        main_turret_left: 2,
+        main_wall_right: 3,
+        main_turret_right: 4,
+        second_center: 5,
+        second_turret_left: 6,
+        second_turret_right: 7,
+        third_wall_center: 8,
+        fourth_turret_center: 9
+    }
+    
     var castle,
         main_center,
         main_wall_left,
